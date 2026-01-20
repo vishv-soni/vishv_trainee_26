@@ -4,6 +4,9 @@ include 'db.php';
 
 $id = $_GET['id'] ?? 0;
 
+$data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id"));
+$currentImg = $data['profile_image'];
+
 if (isset($_POST['update'])) {
     $fname   = $_POST['first_name'];
     $lname   = $_POST['last_name'];
@@ -43,6 +46,8 @@ if (isset($_POST['update'])) {
         $query .= ", password='$password'";
     }
 
+    $finalImg = $currentImg; //default old image
+
     if (!empty($_FILES['profile_image']['name'])) {
         $img_name = $_FILES['profile_image']['name'];
         $tmp_name = $_FILES['profile_image']['tmp_name'];
@@ -50,6 +55,7 @@ if (isset($_POST['update'])) {
         // Move the new file
         if (move_uploaded_file($tmp_name, "uploads/" . $img_name)) {
             $query .= ", profile_image='$img_name'";
+            $finalImg = $img_name; //new image set
         } else {
             echo "Error uploading file.";
         }
@@ -58,17 +64,19 @@ if (isset($_POST['update'])) {
     $query .= " WHERE id=$id";
 
 
-    $result = mysqli_query($conn, $query); 
+    $result = mysqli_query($conn, $query);
 
     if ($result) {
         session_start();
 
-        $_SESSION['userProfileImage'] = $img_name;
+        $_SESSION['userProfileImage'] = $finalImg;
+        $_SESSION['userFname'] = $fname;
+        $_SESSION['userLname'] = $lname;
+
         header('Location: view.php');
         exit;
     }
 }
-$data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id"));
 
 include_once('./includes/header.php');
 include_once('./includes/sidebar.php');
@@ -173,20 +181,21 @@ include_once('./includes/sidebar.php');
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
-                                                name="password" minlength="8" />
+                                                name="password" minlength="8" autocomplete="off" />
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Confirm Password</label>
                                             <input type="password" class="form-control"
-                                                name="confirm_password" minlength="8" id="exampleInputPassword1" />
+                                                name="confirm_password" minlength="8" id="exampleInputPassword1" autocomplete="off" />
                                         </div>
 
                                         <div class="input-group mb-3">
+                                        
                                             <input type="file" name="profile_image"
                                                 class="form-control" id="inputGroupFile02" />
                                             <label class="input-group-text"
-                                                for="inputGroupFile02">Profile Image</label>
+                                                for="inputGroupFile02"> <img src="uploads/<?php echo $data['profile_image']; ?>" width="50" height="50" class="rounded-circle"></label>
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -202,7 +211,6 @@ include_once('./includes/sidebar.php');
                                                 name="phone"
                                                 value="<?php echo $data['phone']; ?>"
                                                 class="form-control"
-                                                required
                                                 id="phone" />
                                         </div>
 
@@ -217,7 +225,7 @@ include_once('./includes/sidebar.php');
                                                         name="gender"
                                                         id="gridRadios1"
                                                         value="Male"
-                                                        required
+
                                                         <?php if ($data['gender'] == "Male") echo "checked"; ?> />
                                                     <label class="form-check-label" for="gridRadios1">
                                                         Male </label>
@@ -229,7 +237,7 @@ include_once('./includes/sidebar.php');
                                                         name="gender"
                                                         id="gridRadios2"
                                                         value="Female"
-                                                        required
+
                                                         <?php if ($data['gender'] == "Female") echo "checked"; ?> />
                                                     <label class="form-check-label" for="gridRadios2">
                                                         Female </label>
@@ -241,7 +249,7 @@ include_once('./includes/sidebar.php');
                                                         name="gender"
                                                         id="gridRadios3"
                                                         value="Other"
-                                                        required
+
                                                         <?php if ($data['gender'] == "Other") echo "checked"; ?> />
                                                     <label class="form-check-label" for="gridRadios3">
                                                         Other </label>
@@ -275,7 +283,7 @@ include_once('./includes/sidebar.php');
                                             <label for="validationCustom04"
                                                 class="form-label">State</label>
                                             <select class="form-select" id="validationCustom04"
-                                                name="country" required>
+                                                name="country">
                                                 <option selected disabled value>Choose...</option>
                                                 <option <?php if ($data['country'] == "India") echo "selected"; ?>>India</option>
                                                 <option <?php if ($data['country'] == "USA") echo "selected"; ?>>USA</option>
@@ -314,7 +322,7 @@ include_once('./includes/sidebar.php');
     </main>
     <!--end::App Main-->
     </div>
-    
+
 </body>
 <?php
 include_once('./includes/footer.php');
