@@ -6,7 +6,7 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     //feth user from db
-    $sql = "SELECT id, email, password FROM users WHERE email = '$email'";
+    $sql = "SELECT * FROM users WHERE email = '$email'";
 
     $user = mysqli_query($conn, $sql);
 
@@ -17,6 +17,9 @@ if (isset($_POST['login'])) {
             if ($user && password_verify($password, $row['password'])) {
                 session_start();
                 $_SESSION['userId'] = $row['id'];
+                $_SESSION['userFname'] = $row['first_name'];
+                $_SESSION['userLname'] = $row['last_name'];
+                $_SESSION['userProfileImage'] = $row['profile_image'];
 
                 header('Location: view.php');
                 exit;

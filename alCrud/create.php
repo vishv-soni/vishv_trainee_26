@@ -114,7 +114,7 @@
                         Name</label>
                       <input
                         type="text"
-                        name="last_name"
+                        name="first_name"
                         class="form-control"
                         required />
                     </div>
@@ -124,7 +124,7 @@
                         Name</label>
                       <input
                         type="text"
-                        name="first_name"
+                        name="last_name"
                         class="form-control"
                         id="lastName"
                         required />

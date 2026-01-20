@@ -17,6 +17,14 @@ if (isset($_POST['update'])) {
     $country = $_POST['country'];
 
 
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        die("Invalid email format.");
+    }
+
+    if (!preg_match('/^[0-9]{10}+$/', $phone)) {
+        die("Invalid Phone Number format.");
+    }
+
     $query = "UPDATE users SET 
         first_name='$fname',
         last_name='$lname',
@@ -50,10 +58,13 @@ if (isset($_POST['update'])) {
     $query .= " WHERE id=$id";
 
 
-    $result = mysqli_query($conn, $query);
+    $result = mysqli_query($conn, $query); 
 
     if ($result) {
-        header("Location: view.php");
+        session_start();
+
+        $_SESSION['userProfileImage'] = $img_name;
+        header('Location: view.php');
         exit;
     }
 }
@@ -118,7 +129,7 @@ include_once('./includes/sidebar.php');
                                 <!--end::Header-->
 
                                 <!--begin::Form-->
-                                <form method="post" action="edit.php?id=<?php echo $id; ?>" enctype="multipart/form-data">
+                                <form method="post" id="myForm" action="edit.php?id=<?php echo $id; ?>" enctype="multipart/form-data">
                                     <!--begin::Body-->
                                     <div class="card-body">
 
@@ -185,12 +196,13 @@ include_once('./includes/sidebar.php');
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="lastName" class="form-label">Phone</label>
+                                            <label for="phone" class="form-label">Phone</label>
                                             <input
                                                 type="number"
                                                 name="phone"
                                                 value="<?php echo $data['phone']; ?>"
                                                 class="form-control"
+                                                required
                                                 id="phone" />
                                         </div>
 
@@ -205,6 +217,7 @@ include_once('./includes/sidebar.php');
                                                         name="gender"
                                                         id="gridRadios1"
                                                         value="Male"
+                                                        required
                                                         <?php if ($data['gender'] == "Male") echo "checked"; ?> />
                                                     <label class="form-check-label" for="gridRadios1">
                                                         Male </label>
@@ -216,6 +229,7 @@ include_once('./includes/sidebar.php');
                                                         name="gender"
                                                         id="gridRadios2"
                                                         value="Female"
+                                                        required
                                                         <?php if ($data['gender'] == "Female") echo "checked"; ?> />
                                                     <label class="form-check-label" for="gridRadios2">
                                                         Female </label>
@@ -227,6 +241,7 @@ include_once('./includes/sidebar.php');
                                                         name="gender"
                                                         id="gridRadios3"
                                                         value="Other"
+                                                        required
                                                         <?php if ($data['gender'] == "Other") echo "checked"; ?> />
                                                     <label class="form-check-label" for="gridRadios3">
                                                         Other </label>
@@ -260,7 +275,7 @@ include_once('./includes/sidebar.php');
                                             <label for="validationCustom04"
                                                 class="form-label">State</label>
                                             <select class="form-select" id="validationCustom04"
-                                                name="country" >
+                                                name="country" required>
                                                 <option selected disabled value>Choose...</option>
                                                 <option <?php if ($data['country'] == "India") echo "selected"; ?>>India</option>
                                                 <option <?php if ($data['country'] == "USA") echo "selected"; ?>>USA</option>
@@ -298,5 +313,8 @@ include_once('./includes/sidebar.php');
     <!--end::App Content-->
     </main>
     <!--end::App Main-->
-    <?php
-    include_once('./includes/footer.php');
+    </div>
+    
+</body>
+<?php
+include_once('./includes/footer.php');

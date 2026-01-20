@@ -73,10 +73,6 @@
     <!--end::Sidebar-->
 
 
-
-
-
-
     <!--begin::App Main-->
     <main class="app-main">
       <!--begin::App Content Header-->
@@ -305,18 +301,6 @@
       <!--end::App Content-->
     </main>
     <!--end::App Main-->
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
