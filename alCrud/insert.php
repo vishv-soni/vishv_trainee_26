@@ -8,18 +8,14 @@ if (isset($_POST['submit'])) {
     $email   = trim($_POST['email']);
     $pass    = $_POST['password'];
     $cpass   = $_POST['confirm_password'];
-
     $errors = [];
 
     if (empty($fname) || empty($lname) || empty($email) || empty($pass)) {
         die("All fields are required.");
     }
-
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         die("Invalid email format.");
     }
-
-    
     if ($pass !== $cpass) {
         $errors[] = "Passwords do not match!";
     }
@@ -38,7 +34,6 @@ if (isset($_POST['submit'])) {
     if (!preg_match("/[\W]+/", $pass)) {
         $errors[] = "Password must contain at least 1 special character.";
     }
-    
     if (empty($errors)) {
         $password = password_hash($pass, PASSWORD_DEFAULT);
 
@@ -47,15 +42,11 @@ if (isset($_POST['submit'])) {
         VALUES 
         ('$fname','$lname','$email','$password')";
 
-    mysqli_query($conn, $sql);
-
-    header("Location: view.php");
+        mysqli_query($conn, $sql);
+        header("Location: view.php");
     } else {
-        // Display errors to the user
         foreach ($errors as $error) {
             echo "<p>Error: $error</p>";
         }
     }
-
- 
 }

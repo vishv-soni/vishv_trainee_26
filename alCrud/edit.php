@@ -1,99 +1,14 @@
 <?php
+include_once('db.php');
 require 'auth.php';
-include 'db.php';
-
-$id = $_GET['id'] ?? 0;
-
-$data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id"));
-$currentImg = $data['profile_image'];
-
-if (isset($_POST['update'])) {
-    $fname   = $_POST['first_name'];
-    $lname   = $_POST['last_name'];
-    $email = $_POST['email'];
-    $pass = $_POST['password'];
-    $cpass = $_POST['confirm_password'];
-    $address = $_POST['address'];
-    $phone   = $_POST['phone'];
-    $gender  = $_POST['gender'];
-    $hobby   = isset($_POST['hobby']) ? implode(",", $_POST['hobby']) : "";
-    $country = $_POST['country'];
-
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        die("Invalid email format.");
-    }
-
-    if (!preg_match('/^[0-9]{10}+$/', $phone)) {
-        die("Invalid Phone Number format.");
-    }
-
-    $query = "UPDATE users SET 
-        first_name='$fname',
-        last_name='$lname',
-        email='$email',
-        address='$address',
-        phone='$phone',
-        gender='$gender',
-        hobby='$hobby',
-        country='$country'";
-
-    if (!empty($pass)) {
-        if ($pass !== $cpass) {
-            die("Password does not match!");
-        }
-        $password = password_hash($pass, PASSWORD_DEFAULT);
-        $query .= ", password='$password'";
-    }
-
-    $finalImg = $currentImg; //default old image
-
-    if (!empty($_FILES['profile_image']['name'])) {
-        $img_name = $_FILES['profile_image']['name'];
-        $tmp_name = $_FILES['profile_image']['tmp_name'];
-
-        // Move the new file
-        if (move_uploaded_file($tmp_name, "uploads/" . $img_name)) {
-            $query .= ", profile_image='$img_name'";
-            $finalImg = $img_name; //new image set
-        } else {
-            echo "Error uploading file.";
-        }
-    }
-
-    $query .= " WHERE id=$id";
-
-
-    $result = mysqli_query($conn, $query);
-
-    if ($result) {
-        session_start();
-
-        $_SESSION['userProfileImage'] = $finalImg;
-        $_SESSION['userFname'] = $fname;
-        $_SESSION['userLname'] = $lname;
-
-        header('Location: view.php');
-        exit;
-    }
-}
-
 include_once('./includes/header.php');
 include_once('./includes/sidebar.php');
-
-
+include_once('editLogic.php');
 ?>
-
-
 
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
-
-        <!--begin::Sidebar-->
-
-        <!--end::Sidebar-->
-
         <!--begin::App Main-->
         <main class="app-main">
             <!--begin::App Content Header-->
@@ -135,12 +50,10 @@ include_once('./includes/sidebar.php');
                                         Example</div>
                                 </div>
                                 <!--end::Header-->
-
                                 <!--begin::Form-->
-                                <form method="post" id="myForm" action="edit.php?id=<?php echo $id; ?>" enctype="multipart/form-data">
+                                <form method="post" id="myForm" action="editLogic.php?id=<?php echo $id; ?>" enctype="multipart/form-data">
                                     <!--begin::Body-->
                                     <div class="card-body">
-
                                         <div class="mb-3">
                                             <label for="firstName" class="form-label">First
                                                 Name</label>
@@ -191,7 +104,7 @@ include_once('./includes/sidebar.php');
                                         </div>
 
                                         <div class="input-group mb-3">
-                                        
+
                                             <input type="file" name="profile_image"
                                                 class="form-control" id="inputGroupFile02" />
                                             <label class="input-group-text"
@@ -290,25 +203,17 @@ include_once('./includes/sidebar.php');
                                                 <option <?php if ($data['country'] == "UK") echo "selected"; ?>>UK</option>
                                             </select>
                                         </div>
-
                                     </div>
                                     <!--end::Body-->
                                     <!--begin::Footer-->
                                     <div class="card-footer">
-                                        <!-- <button type="submit" name="submit"
-                        class="btn btn-primary">Submit</button> -->
                                         <input type="submit" name="update" class="btn btn-primary" value="Update">
-
-
                                     </div>
                                     <!--end::Footer-->
                                 </form>
                                 <!--end::Form-->
                             </div>
                             <!--end::Quick Example-->
-
-
-
                         </div>
                         <!--end::Form Validation-->
                     </div>
@@ -322,7 +227,6 @@ include_once('./includes/sidebar.php');
     </main>
     <!--end::App Main-->
     </div>
-
 </body>
 <?php
 include_once('./includes/footer.php');

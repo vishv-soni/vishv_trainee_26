@@ -1,41 +1,3 @@
-<?php
-include 'db.php';
-
-if (isset($_POST['login'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    //feth user from db
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-
-    $user = mysqli_query($conn, $sql);
-
-    if ($user->num_rows === 1) {
-
-        while ($row = mysqli_fetch_assoc($user)) {
-            //verify password
-            if ($user && password_verify($password, $row['password'])) {
-                session_start();
-                $_SESSION['userId'] = $row['id'];
-                $_SESSION['userFname'] = $row['first_name'];
-                $_SESSION['userLname'] = $row['last_name'];
-                $_SESSION['userProfileImage'] = $row['profile_image'];
-
-                header('Location: view.php');
-                exit;
-            } else {
-                // Invalid email or password
-                echo "Invalid email or password.";
-            }
-        }
-    } else {
-        echo "User not found. Please <span>Register</span>.";
-    }
-}
-
-?>
-
-
 <!doctype html>
 <html lang="en">
 <!--begin::Head-->
@@ -98,10 +60,6 @@ if (isset($_POST['login'])) {
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
-
-        <!--begin::Sidebar-->
-
-        <!--end::Sidebar-->
         <!--begin::App Main-->
         <main class="app-main">
             <!--begin::App Content Header-->
@@ -141,12 +99,10 @@ if (isset($_POST['login'])) {
                                     <div class="card-title">User Details</div>
                                 </div> -->
                                 <!--end::Header-->
-
                                 <!--begin::Form-->
-                                <form method="post">
+                                <form method="post" action="loginLogic.php">
                                     <!--begin::Body-->
                                     <div class="card-body">
-
                                         <div class="mb-3">
                                             <label for="exampleInputEmail1" class="form-label">Email
                                                 address</label>
@@ -169,29 +125,19 @@ if (isset($_POST['login'])) {
                                             <input type="password" class="form-control"
                                                 name="password" minlength="8" required value="<?php echo $data['password']; ?>" />
                                         </div>
-
-
                                     </div>
                                     <!--end::Body-->
                                     <!--begin::Footer-->
                                     <div class="card-footer">
-                                        <!-- <button type="submit" name="submit"
-                        class="btn btn-primary">Submit</button> -->
                                         <input type="submit" name="login" class="btn btn-primary" value="Login">
-
-
                                     </div>
                                     <!--end::Footer-->
                                 </form>
                                 <!--end::Form-->
                                 <p style="text-align: center;">If you don't have account then <span><a href="create.php">Register</a></span></p>
                                 <!-- <p style="text-align: center;"><?php echo $error; ?></p> -->
-
                             </div>
                             <!--end::Quick Example-->
-
-
-
                         </div>
                         <!--end::Form Validation-->
                     </div>
@@ -204,7 +150,6 @@ if (isset($_POST['login'])) {
     <!--end::App Content-->
     </main>
     <!--end::App Main-->
-   
     </div>
     <!--end::App Wrapper-->
     <!--begin::Script-->

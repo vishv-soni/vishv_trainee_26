@@ -1,34 +1,13 @@
 <?php
 require 'auth.php';
-include_once('./includes/header.php');
-include_once('./includes/sidebar.php');
-include 'db.php';
-
-$search = $_GET['search'] ?? '';
-
-if ($search != '') {
-    $search_safe = mysqli_real_escape_string($conn, $search);
-    $sql = "SELECT * FROM users 
-            WHERE first_name LIKE '%$search_safe%'
-               OR last_name LIKE '%$search_safe%'
-               OR email LIKE '%$search_safe%'
-               OR country LIKE '%$search_safe%'";
-} else {
-    $sql = "SELECT * FROM users";
-}
-
-$result = mysqli_query($conn, $sql);
+include_once('viewLogic.php');
 ?>
-
-
-
 <!--begin::App Main-->
 <main class="app-main">
     <!--begin::App Content Header-->
     <div class="app-content-header">
         <!--begin::Container-->
         <div class="container-fluid">
-
         </div>
         <!--end::Container-->
     </div>
@@ -41,8 +20,7 @@ $result = mysqli_query($conn, $sql);
             <div class="card mb-4">
                 <div class="card-header">
                     <!-- <h3 class="card-title" >User List</h3> -->
-
-                    <form method="get">
+                    <form method="get" action="viewLogic.php">
                         <div class="input-group">
                             <input
                                 type="text"
@@ -58,12 +36,9 @@ $result = mysqli_query($conn, $sql);
                             <?php } ?>
                         </div>
                     </form>
-
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-
-
                     <table class="table table-bordered" role="table">
                         <thead>
                             <tr>
@@ -82,13 +57,10 @@ $result = mysqli_query($conn, $sql);
                         <tbody>
                             <?php
                             while ($row = mysqli_fetch_assoc($result)) {
-
                                 $userImage = (!empty($row['profile_image'])) ?
                                     "uploads/" . $row['profile_image'] :
                                     "assets/download.jpeg";
                             ?>
-
-
                                 <tr class="align-middle">
                                     <td><?= $row['id'] ?></td>
                                     <td><img src="<?= $userImage ?>" width="50"></td>
@@ -125,6 +97,5 @@ $result = mysqli_query($conn, $sql);
     <!--end::App Content-->
 </main>
 <!--end::App Main-->
-
 <?php
 include_once('./includes/footer.php');
