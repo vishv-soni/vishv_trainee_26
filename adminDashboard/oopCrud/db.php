@@ -30,6 +30,7 @@ class db
         }
     }
 
+    //Insert Query
     public function insert($query)
     {
         $result = mysqli_query($this->conn, $query) or die(mysqli_error($this->conn));
@@ -41,6 +42,7 @@ class db
         }
     }
 
+    //Select Query
     public function select($query)
     {
         $result = mysqli_query($this->conn, $query) or die(mysqli_error($this->conn));
@@ -51,4 +53,5 @@ class db
             return false;
         }
     }
+
 }

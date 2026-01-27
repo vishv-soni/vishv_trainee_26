@@ -1,7 +1,5 @@
 <?php
 include_once('db.php');
-include_once('./includes/header.php');
-include_once('./includes/sidebar.php');
 
 $search = $_GET['search'] ?? '';
 if ($search != '') {
@@ -16,4 +14,3 @@ if ($search != '') {
 }
 
 $result = mysqli_query($conn, $sql);
-?>

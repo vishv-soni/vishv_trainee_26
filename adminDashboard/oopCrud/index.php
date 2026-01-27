@@ -1,8 +1,11 @@
 <?php
-require 'auth.php';
-include_once('viewLogic.php');
+include_once '../adminLteCrud/auth.php';
+include_once '../includes/header.php';
+include_once '../includes/sidebar.php';
+include_once 'classes/Register.php'; 
+$register = new Register();
 ?>
-<!--begin::App Main-->
+
 <main class="app-main">
     <!--begin::App Content Header-->
     <div class="app-content-header">
@@ -19,23 +22,8 @@ include_once('viewLogic.php');
             <!-- <a href="logout.php">Logout</a> -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <!-- <h3 class="card-title" >User List</h3> -->
-                    <form method="get" action="viewLogic.php">
-                        <div class="input-group">
-                            <input
-                                type="text"
-                                name="search"
-                                class="form-control"
-                                placeholder="Search by name, email, country..."
-                                value="<?= htmlspecialchars($search) ?>">
-                            <button class="btn btn-primary" type="submit">
-                                <i class="bi bi-search"></i>
-                            </button>
-                            <?php if ($search != '') { ?>
-                                <a href="view.php" class="btn btn-secondary">Reset</a>
-                            <?php } ?>
-                        </div>
-                    </form>
+                    <h3 class="card-title" >Ooops User List</h3>
+                    
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -51,15 +39,17 @@ include_once('viewLogic.php');
                                 <th scope="col">Gender</th>
                                 <th scope="col">Hobby</th>
                                 <th scope="col">Country</th>
+                                <th scope="col">Address</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
+                            $result = $register->allUsers();
                             while ($row = mysqli_fetch_assoc($result)) {
                                 $userImage = (!empty($row['profile_image'])) ?
-                                    "uploads/" . $row['profile_image'] :
-                                    "assets/download.jpeg";
+                                    "upload/" . $row['profile_image'] :
+                                    "../assets/download.jpeg";
                             ?>
                                 <tr class="align-middle">
                                     <td><?= $row['id'] ?></td>
@@ -71,6 +61,7 @@ include_once('viewLogic.php');
                                     <td><?= $row['gender'] ?></td>
                                     <td><?= $row['hobby'] ?></td>
                                     <td><?= $row['country'] ?></td>
+                                    <td><?= $row['address'] ?></td>
                                     <td>
                                         <button class="badge text-bg-primary"><a style="color: white; padding: 2px; text-decoration: none;" href="edit.php?id=<?= $row['id'] ?>">Edit</a></button>
                                         <button class="badge text-bg-danger"><a style="color: white; padding: 2px; text-decoration: none;" href="delete.php?id=<?= $row['id'] ?>">Delete</a></button>
@@ -96,6 +87,5 @@ include_once('viewLogic.php');
     </div>
     <!--end::App Content-->
 </main>
-<!--end::App Main-->
-<?php
-include_once('./includes/footer.php');
+<?php 
+include_once '../includes/footer.php';

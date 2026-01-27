@@ -1,9 +1,14 @@
 <?php
 include_once('db.php');
 require 'auth.php';
-include_once('./includes/header.php');
-include_once('./includes/sidebar.php');
-include_once('editLogic.php');
+include_once('../includes/header.php');
+include_once('../includes/sidebar.php');
+
+$old = $_SESSION['old'] ?? [];
+unset($_SESSION['old']);
+
+$id = $_GET['id'] ?? 0;
+$data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id"));
 ?>
 
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
@@ -18,12 +23,12 @@ include_once('editLogic.php');
                     <!--begin::Row-->
                     <div class="row">
                         <div class="col-sm-6">
-                            <h3 class="mb-0">User Form</h3>
+                            <h3 class="mb-0">Edit User</h3>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-end">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">User
+                                <li class="breadcrumb-item active" aria-current="page">Edit
                                     Form</li>
                             </ol>
                         </div>
@@ -45,13 +50,10 @@ include_once('editLogic.php');
                             <!--begin::Quick Example-->
                             <div class="card card-primary card-outline mb-4">
                                 <!--begin::Header-->
-                                <div class="card-header">
-                                    <div class="card-title">Quick
-                                        Example</div>
-                                </div>
+
                                 <!--end::Header-->
                                 <!--begin::Form-->
-                                <form method="post" id="myForm" action="editLogic.php?id=<?php echo $id; ?>" enctype="multipart/form-data">
+                                <form method="post" id="myForm" action="editLogic.php?id=<?php echo intval($id); ?>" enctype="multipart/form-data">
                                     <!--begin::Body-->
                                     <div class="card-body">
                                         <div class="mb-3">
@@ -60,8 +62,9 @@ include_once('editLogic.php');
                                             <input
                                                 type="text"
                                                 name="first_name"
-                                                value="<?php echo $data['first_name']; ?>"
+                                                value="<?php echo $old['first_name'] ?? $data['first_name']; ?>"
                                                 class="form-control" />
+
                                         </div>
 
                                         <div class="mb-3">
@@ -70,7 +73,7 @@ include_once('editLogic.php');
                                             <input
                                                 type="text"
                                                 name="last_name"
-                                                value="<?php echo $data['last_name']; ?>"
+                                                value="<?php echo $old['last_name'] ?? $data['last_name']; ?>"
                                                 class="form-control"
                                                 id="lastName" />
                                         </div>
@@ -81,13 +84,14 @@ include_once('editLogic.php');
                                             <input
                                                 type="email"
                                                 name="email"
-                                                value="<?php echo $data['email']; ?>"
+                                                value="<?php echo $old['email'] ?? $data['email']; ?>"
                                                 class="form-control"
                                                 id="exampleInputEmail1"
                                                 aria-describedby="emailHelp" />
                                             <div id="emailHelp" class="form-text">
                                                 We'll never share your email with anyone else.
                                             </div>
+
                                         </div>
 
                                         <div class="mb-3">
@@ -95,12 +99,16 @@ include_once('editLogic.php');
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
                                                 name="password" minlength="8" autocomplete="off" />
+                                            <p style='color: red;'><?php echo $_SESSION['password_errors'] ?? ''; ?></p>
+                                            <?php unset($_SESSION['password_errors']); ?>
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Confirm Password</label>
                                             <input type="password" class="form-control"
                                                 name="confirm_password" minlength="8" id="exampleInputPassword1" autocomplete="off" />
+                                            <p style='color: red;'><?php echo $_SESSION['confirm_password_error'] ?? ''; ?></p>
+                                            <?php unset($_SESSION['confirm_password_error']); ?>
                                         </div>
 
                                         <div class="input-group mb-3">
@@ -114,7 +122,7 @@ include_once('editLogic.php');
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Address</span>
                                             <textarea class="form-control"
-                                                aria-label="With textarea" name="address"><?php echo $data['address']; ?></textarea>
+                                                aria-label="With textarea" name="address"><?php echo $old['address'] ?? $data['address']; ?></textarea>
                                         </div>
 
                                         <div class="mb-3">
@@ -122,9 +130,11 @@ include_once('editLogic.php');
                                             <input
                                                 type="number"
                                                 name="phone"
-                                                value="<?php echo $data['phone']; ?>"
+                                                value="<?php echo $old['phone'] ?? $data['phone']; ?>"
                                                 class="form-control"
                                                 id="phone" />
+                                            <p style='color: red;'><?php echo $_SESSION['general_errors'] ?? ''; ?></p>
+                                            <?php unset($_SESSION['general_errors']); ?>
                                         </div>
 
                                         <fieldset class="row mb-3">
@@ -172,7 +182,6 @@ include_once('editLogic.php');
 
                                         hobby
                                         <?php $h = explode(",", $data['hobby']); ?>
-
                                         <div class="mb-3 form-check">
                                             <input type="checkbox" class="form-check-input"
                                                 name="hobby[]" value="Reading" <?php if (in_array("Reading", $h)) echo "checked"; ?>>
@@ -229,4 +238,4 @@ include_once('editLogic.php');
     </div>
 </body>
 <?php
-include_once('./includes/footer.php');
+include_once('../includes/footer.php');

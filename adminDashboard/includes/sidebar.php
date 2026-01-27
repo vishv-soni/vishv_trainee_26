@@ -6,7 +6,7 @@
           <a href="./index.html" class="brand-link">
             <!--begin::Brand Image-->
             <img
-              src="./assets/AdminLTELogo.png"
+              src="../assets/AdminLTELogo.png"
               alt="AdminLTE Logo"
               class="brand-image opacity-75 shadow"
             />
@@ -34,19 +34,55 @@
                 <a href="#" class="nav-link active">
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>
-                    CRUD
+                    adminLTE CRUD
                     <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="./view.php" class="nav-link active">
+                    <a href="../adminLteCrud/view.php" class="nav-link ">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>View User</p>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a href="./create.php" class="nav-link">
+                    <a href="../adminLteCrud/addUser.php" class="nav-link">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Add User</p>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </li>
+              
+            </ul>
+            <!--end::Sidebar Menu-->
+            <!--begin::Sidebar Menu-->
+            <ul
+              class="nav sidebar-menu flex-column"
+              data-lte-toggle="treeview"
+              role="navigation"
+              aria-label="Main navigation"
+              data-accordion="false"
+              id="navigation"
+            >
+              <li class="nav-item menu-open">
+                <a href="#" class="nav-link active">
+                  <i class="nav-icon bi bi-speedometer"></i>
+                  <p>
+                    Oops CRUD
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="../oopCrud/index.php" class="nav-link ">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>View User</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="../oopCrud/addUser.php" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Add User</p>
                     </a>

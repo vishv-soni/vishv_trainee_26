@@ -1,5 +1,7 @@
+<?php session_start(); ?>
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>Register</title>
@@ -19,7 +21,7 @@
     name="keywords"
     content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant" />
   <meta name="supported-color-schemes" content="light dark" />
-  <link rel="preload" href="./css/adminlte.css" as="style" />
+  <link rel="preload" href="css/adminlte.css" as="style" />
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
@@ -35,7 +37,7 @@
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
     crossorigin="anonymous" />
-  <link rel="stylesheet" href="./css/adminlte.css" />
+  <link rel="stylesheet" href="css/adminlte.css" />
 </head>
 <main class="app-main">
   <!--begin::App Content Header-->
@@ -72,106 +74,109 @@
           <div class="card card-primary card-outline mb-4">
             <!--begin::Header-->
             <div class="card-header">
-              <div class="card-title">Quick
-                Example</div>
-            </div>
-            <!--end::Header-->
-            <!--begin::Form-->
-            <form method="post" action="insert.php"
-              enctype="multipart/form-data">
-              <!--begin::Body-->
-              <div class="card-body">
-                <div class="mb-3">
-                  <label for="firstName" class="form-label">First
-                    Name</label>
-                  <input
-                    type="text"
-                    name="first_name"
-                    class="form-control"
-                    required />
-                </div>
-                <div class="mb-3">
-                  <label for="lastName" class="form-label">Last
-                    Name</label>
-                  <input
-                    type="text"
-                    name="last_name"
-                    class="form-control"
-                    id="lastName"
-                    required />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Email
-                    address</label>
-                  <input
-                    type="email"
-                    name="email"
-                    class="form-control"
-                    id="exampleInputEmail1"
-                    aria-describedby="emailHelp"
-                    required />
-                  <div id="emailHelp" class="form-text">
-                    We'll never share your email with anyone else.
+              <!--end::Header-->
+              <!--begin::Form-->
+              <form method="post" action="insert.php" enctype="multipart/form-data">
+                <!--begin::Body-->
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label for="firstName" class="form-label">First
+                      Name</label>
+                    <input
+                      type="text"
+                      name="first_name"
+                      class="form-control"
+                      required />
+                  </div>
+                  <div class="mb-3">
+                    <label for="lastName" class="form-label">Last
+                      Name</label>
+                    <input
+                      type="text"
+                      name="last_name"
+                      class="form-control"
+                      id="lastName"
+                      required />
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Email
+                      address</label>
+                    <input
+                      type="email"
+                      name="email"
+                      class="form-control"
+                      id="exampleInputEmail1"
+                      aria-describedby="emailHelp"
+                      required />
+                    <div id="emailHelp" class="form-text">
+                      We'll never share your email with anyone else.
+                    </div>
+                    <p style='color: red;'><?php echo $_SESSION['general_errors'] ?? ''; ?></p>
+                    <?php unset($_SESSION['general_errors']); ?>
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1"
+                      class="form-label">Password</label>
+                    <input type="password" class="form-control"
+                      name="password" minlength="8" required id="exampleInputPassword1" required />
+                    <p style='color: red;'><?php echo $_SESSION['password_errors'] ?? ''; ?></p>
+                    <?php unset($_SESSION['password_errors']); ?>
+
+                  </div>
+                  <div class="mb-3">
+                    <label for="exampleInputPassword1"
+                      class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control"
+                      name="confirm_password" required id="exampleInputPassword1"
+                      required />
+                    <p style='color: red;'><?php echo $_SESSION['confirm_password_error'] ?? ''; ?></p>
+                    <?php unset($_SESSION['confirm_password_error']); ?>
                   </div>
                 </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1"
-                    class="form-label">Password</label>
-                  <input type="password" class="form-control"
-                    name="password" minlength="8" required id="exampleInputPassword1" required />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1"
-                    class="form-label">Confirm Password</label>
-                  <input type="password" class="form-control"
-                    name="confirm_password" minlength="8" required id="exampleInputPassword1"
-                    required />
-                </div>
-              </div>
-              <!--end::Body-->
-              <!--begin::Footer-->
-              <div class="card-footer" style="display:flex; justify-content:center; ">
-                <!-- <button type="submit" name="submit"
+                <!--end::Body-->
+                <!--begin::Footer-->
+                <div class="card-footer" style="display:flex; justify-content:center; ">
+                  <!-- <button type="submit" name="submit"
                         class="btn btn-primary">Submit</button> -->
-                <input type="submit" name="submit" class="btn btn-primary" value="Register">
-              </div>
-              <!--end::Footer-->
-            </form>
-            <!--end::Form-->
+                  <input type="submit" name="submit" class="btn btn-primary" value="Register">
+                </div>
+                <!--end::Footer-->
+              </form>
+              <!--end::Form-->
+            </div>
+            <!--end::Quick Example-->
+            <!--begin::JavaScript-->
+            <script>
+              // Example starter JavaScript for disabling form submissions if there are invalid fields
+              (() => {
+                'use strict';
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                const forms = document.querySelectorAll('.needs-validation');
+                // Loop over them and prevent submission
+                Array.from(forms).forEach((form) => {
+                  form.addEventListener(
+                    'submit',
+                    (event) => {
+                      if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }
+                      form.classList.add('was-validated');
+                    },
+                    false,
+                  );
+                });
+              })();
+            </script>
+            <!--end::JavaScript-->
           </div>
-          <!--end::Quick Example-->
-          <!--begin::JavaScript-->
-          <script>
-            // Example starter JavaScript for disabling form submissions if there are invalid fields
-            (() => {
-              'use strict';
-              // Fetch all the forms we want to apply custom Bootstrap validation styles to
-              const forms = document.querySelectorAll('.needs-validation');
-              // Loop over them and prevent submission
-              Array.from(forms).forEach((form) => {
-                form.addEventListener(
-                  'submit',
-                  (event) => {
-                    if (!form.checkValidity()) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                  },
-                  false,
-                );
-              });
-            })();
-          </script>
-          <!--end::JavaScript-->
+          <!--end::Form Validation-->
         </div>
-        <!--end::Form Validation-->
+        <!--end::Col-->
       </div>
-      <!--end::Col-->
+      <!--end::Row-->
     </div>
-    <!--end::Row-->
-  </div>
-  <!--end::Container-->
+    <!--end::Container-->
   </div>
   <!--end::App Content-->
 </main>
@@ -188,7 +193,7 @@
   src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
   crossorigin="anonymous"></script>
 <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-<script src="./js/adminlte.js"></script>
+<script src="js/adminlte.js"></script>
 <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
 <script>
   const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

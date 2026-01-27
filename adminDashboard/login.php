@@ -1,10 +1,13 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="en">
 <!--begin::Head-->
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | General Form Elements</title>
+    <title>Login</title>
     <!--begin::Accessibility Meta Tags-->
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=yes" />
@@ -27,7 +30,7 @@
     <!--begin::Accessibility Features-->
     <!-- Skip links will be dynamically added by accessibility.js -->
     <meta name="supported-color-schemes" content="light dark" />
-    <link rel="preload" href="./css/adminlte.css" as="style" />
+    <link rel="preload" href="css/adminlte.css" as="style" />
     <!--end::Accessibility Features-->
     <!--begin::Fonts-->
     <link
@@ -51,7 +54,7 @@
         crossorigin="anonymous" />
     <!--end::Third Party Plugin(Bootstrap Icons)-->
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="./css/adminlte.css" />
+    <link rel="stylesheet" href="css/adminlte.css" />
     <!--end::Required Plugin(AdminLTE)-->
 </head>
 <!--end::Head-->
@@ -123,7 +126,9 @@
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
-                                                name="password" minlength="8" required value="<?php echo $data['password']; ?>" />
+                                                name="password" required value="<?php echo $data['password']; ?>" />
+                                                <p style='color: red;'><?php echo $_SESSION['authLogin']; ?></p>
+                                                <?php unset($_SESSION['authLogin']); ?>
                                         </div>
                                     </div>
                                     <!--end::Body-->
@@ -166,7 +171,7 @@
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
         crossorigin="anonymous"></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="./js/adminlte.js"></script>
+    <script src="js/adminlte.js"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
         const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

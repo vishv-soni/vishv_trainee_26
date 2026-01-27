@@ -1,5 +1,6 @@
 <?php
-include 'db.php';
+include 'adminLteCrud/db.php';
+session_start();
 
 if (isset($_POST['login'])) {
     $email = $_POST['email'];
@@ -17,13 +18,19 @@ if (isset($_POST['login'])) {
                 $_SESSION['userFname'] = $row['first_name'];
                 $_SESSION['userLname'] = $row['last_name'];
                 $_SESSION['userProfileImage'] = $row['profile_image'];
-                header('Location: view.php');
+                header('Location: adminLteCrud/view.php');
                 exit;
             } else {
-                echo "Invalid email or password.";
+                $wrongValue = "Invalid email or password.";
+                $_SESSION['authLogin'] = $wrongValue;      
+                header('Location: login.php');
+                exit;
             }
         }
     } else {
-        echo "User not found. Please <span>Register</span>.";
+        $wrongUser = "User not found. Please <span>Register</span>.";
+        $_SESSION['authLogin'] = $wrongUser;
+        header('Location: login.php');
+        exit;
     }
 }

@@ -5,8 +5,8 @@
         <!--end::To the end-->
         <!--begin::Copyright-->
         <strong>
-          Copyright &copy; 2014-2025&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+          Copyright &copy; 2026&nbsp;
+          <a href="https://adminlte.io" class="text-decoration-none">Vishv Soni</a>.
         </strong>
         All rights reserved.
         <!--end::Copyright-->
@@ -31,7 +31,7 @@
       crossorigin="anonymous"
     ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="./js/adminlte.js"></script>
+    <script src="../js/adminlte.js"></script>
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
