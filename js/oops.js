@@ -1,0 +1,105 @@
+//class and objedts
+class car {
+    constructor(brand, model) { //properties
+        this.brand = brand;
+        this.model = model;
+    }
+    showDetails() {//methods
+        console.log(`car brand is ${this.brand} and model is ${this.model}.`);
+    }
+}
+const car1 = new car("porsche", "cayenne");
+car1.showDetails();
+
+//abstraction using clousures
+function count() {
+    let count = 0;
+    return function increment() {
+        count++;
+        console.log(count);
+
+    }
+}
+const counter = count();
+counter();
+counter();
+
+//inheritance class based(multilevel)
+class one {
+    constructor(name) {
+        this.name = name;
+    }
+    greet() {
+        console.log(`hello ${this.name}`);
+    }
+}
+class two extends one {
+    constructor(name) {
+        super(name);//super(name) in its constructor to inherit the name property from the parent class.
+    }
+}
+class three extends two {
+    constructor(name) {
+        super(name);
+    }
+}
+const cInheritance = new three("john");
+cInheritance.greet();
+
+//mixins for inheritance
+const mOne = {
+    speak() {
+        console.log(`${this.name} is speaking.`);
+    }
+}
+const mTwo = {
+    walk() {
+        console.log(`${this.name} is walking.`);
+    }
+}
+function person(name) {
+    this.name = name;
+}
+Object.assign(person.prototype, mOne, mTwo)
+const p1 = new person("alice");
+p1.speak();
+p1.walk();
+
+// polymorphism method overriding
+class overrideAnimal {
+    speak() {
+        console.log("Animal speaks");
+    }
+}
+class overrideDog extends overrideAnimal {
+    speak() {
+        console.log("Dog barks");
+    }
+}
+const myDog = new overrideDog();
+myDog.speak(); // Dog barks, child overrides parent method
+
+//polymorphism method overloading 
+class calculator {
+    add(a, b) {
+        if (b === undefined) {
+            return a + a;
+        }
+        return a + b;
+    }
+}
+const calc = new calculator();
+console.log(calc.add(5));
+console.log(calc.add(5, 3));
+
+//function constructor methods
+function fCar(name, year){
+    this.name = name;
+    this.year = year;
+    this.carInfo = function(){
+        console.log(`${this.name}, ${this.year}`);
+        
+    }
+}
+const myFCar = new fCar("ford", 2020);
+myFCar.carInfo();

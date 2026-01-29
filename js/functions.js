@@ -1,0 +1,89 @@
+// function with default parameters
+function multiplyNumbers(a, b = 2) {
+    return a * b;
+}
+console.log("Default parameter: " + multiplyNumbers(5)); 
+console.log("Default parameter: " + multiplyNumbers(5, 3)); 
+
+// named function
+function greetWorld() {
+    console.log("named function: Hello, World!");
+}
+console.log(greetWorld());
+
+// anonymous function
+let greetUniverse = function () {
+    console.log("anonymous function: Hello, Universe!");
+};
+greetUniverse();
+
+// function expression
+let addNumbers = function (a, b) {
+    return a + b;
+};
+console.log(addNumbers(5, 10));
+
+// arrow function (no own this binding)
+let squareNumber = (x) => {
+    return x * x;
+};
+console.log(squareNumber(6));
+
+// IIFE - Immediately Invoked Function Expression
+(function runImmediately() {
+    console.log("This function runs itself immediately after it's defined!");
+})();
+
+// callback function
+function applyCallback(n, callbackFn) {
+    return callbackFn(n);
+}
+const doubleNumber = (n) => n * 2;
+console.log(applyCallback(5, doubleNumber));
+
+// constructor function (camelCase function, PascalCase usually recommended for classes)
+function dogConstructor(name, breed) {
+    this.name = name;
+    this.breed = breed;
+}
+let myDogInstance = new dogConstructor("Buddy", "Golden Retriever");
+console.log(myDogInstance.name);
+console.log(myDogInstance.breed);
+
+// async function
+async function fetchDataAsync() {
+    return "Data fetched!";
+}
+fetchDataAsync().then(data => console.log(data));
+
+// generator function
+function* idGeneratorFunc() {
+    let id = 1;
+    while (true) {
+        yield id++;
+    }
+}
+const idGenInstance = idGeneratorFunc();
+console.log(idGenInstance.next().value);
+console.log(idGenInstance.next().value);
+console.log(idGenInstance.next().value);
+
+// recursive function
+function calculateFactorial(n) {
+    if (n <= 1) return 1;
+    return n * calculateFactorial(n - 1);
+}
+console.log(calculateFactorial(5));
+
+// higher-order function
+function operateOnNumbers(a, b, operationFn) {
+    return operationFn(a, b);
+}
+const sumOperation = (x, y) => x + y;
+console.log(operateOnNumbers(4, 5, sumOperation));
+
+// rest parameters
+function sumAllNumbers(...numbers) {
+    return numbers.reduce((a, b) => a + b, 0);
+}
+console.log(sumAllNumbers(1, 2, 3, 4));
