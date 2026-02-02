@@ -249,11 +249,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!--end::App Main-->
 <?php
 include_once '../includes/footer.php';
-
-
-
-
-
-
-
-?>

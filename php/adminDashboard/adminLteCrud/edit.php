@@ -59,11 +59,11 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                         <div class="mb-3">
                                             <label for="firstName" class="form-label">First
                                                 Name</label>
-                                            <input
+                                            <input 
                                                 type="text"
                                                 name="first_name"
                                                 value="<?php echo $old['first_name'] ?? $data['first_name']; ?>"
-                                                class="form-control" />
+                                                class="form-control" required/>
 
                                         </div>
 
@@ -75,7 +75,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                 name="last_name"
                                                 value="<?php echo $old['last_name'] ?? $data['last_name']; ?>"
                                                 class="form-control"
-                                                id="lastName" />
+                                                id="lastName" required/>
                                         </div>
 
                                         <div class="mb-3">
@@ -114,14 +114,14 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                         <div class="input-group mb-3">
 
                                             <input type="file" name="profile_image"
-                                                class="form-control" id="inputGroupFile02" />
+                                                class="form-control" id="inputGroupFile02" required/>
                                             <label class="input-group-text"
                                                 for="inputGroupFile02"> <img src="uploads/<?php echo $data['profile_image']; ?>" width="50" height="50" class="rounded-circle"></label>
                                         </div>
 
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Address</span>
-                                            <textarea class="form-control"
+                                            <textarea required class="form-control"
                                                 aria-label="With textarea" name="address"><?php echo $old['address'] ?? $data['address']; ?></textarea>
                                         </div>
 
@@ -132,7 +132,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                 name="phone"
                                                 value="<?php echo $old['phone'] ?? $data['phone']; ?>"
                                                 class="form-control"
-                                                id="phone" />
+                                                id="phone" required/>
                                             <p style='color: red;'><?php echo $_SESSION['general_errors'] ?? ''; ?></p>
                                             <?php unset($_SESSION['general_errors']); ?>
                                         </div>
@@ -142,7 +142,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                 class="col-form-label col-sm-2 pt-0">Gender</legend>
                                             <div class="col-sm-10">
                                                 <div class="form-check">
-                                                    <input
+                                                    <input required
                                                         class="form-check-input"
                                                         type="radio"
                                                         name="gender"
@@ -154,7 +154,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                         Male </label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input
+                                                    <input required
                                                         class="form-check-input"
                                                         type="radio"
                                                         name="gender"
@@ -166,7 +166,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                         Female </label>
                                                 </div>
                                                 <div class="form-check mb-3">
-                                                    <input
+                                                    <input required
                                                         class="form-check-input"
                                                         type="radio"
                                                         name="gender"

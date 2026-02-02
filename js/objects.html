@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>objects</title>
+    </head>
+    <body>
+        <script>
+      const me = {
+        name: "vishv",
+        age: 21,
+        job: "software engineer trainee"
+      };
+      console.log(me);
+
+      //Creation Using new Object() Constructor
+      const meNew = new Object();
+      meNew.name = "vishv";
+      meNew.age = 21;
+      meNew.job = "software engineer trainee";
+      console.log(meNew);
+
+      const objUpdate = {
+        name: "vishv",
+        age: 21,
+      };
+        console.log(objUpdate);
+        objUpdate.age = 22; // Updating age property
+        console.log(objUpdate);
+        objUpdate.job = "developer"; // Adding job property
+        console.log(objUpdate);
+        delete objUpdate.name; // Deleting name property
+        console.log(objUpdate);
+
+        //checking property existence
+        console.log("age" in objUpdate); // true
+        console.log(objUpdate.hasOwnProperty("number")); // false
+
+        //iterate for in loop
+        const meIterate = {name:"vishv", age:22}
+        for (const key in meIterate) {
+            const element = meIterate[key];
+            console.log("for in: " + key + ": " + element);
+        }
+
+        //merging object also using Object.assign()
+        let obj1 = { name: "vishv" };
+        let obj2 = { age: 23};
+        let obj3 = {...obj1, ...obj2};
+        let objAss = Object.assign({}, obj1, obj2);
+        console.log(objAss);
+        console.log(obj3);
+
+        //length using Object.keys()
+        console.log(Object.keys(obj3).length);
+
+        // use function() with object constructor. 
+        let gfg = { };
+        gfg.a = "JavaScript";
+        gfg.b = "GeeksforGeeks";
+        gfg.c = add;
+        // Declare function add()
+        function add() {
+            return (gfg.a +" "+ gfg.b);
+        };
+        console.log("Subject: " + gfg.a);
+        console.log("Author: " + gfg.b);
+        console.log("Adding the strings: "+ gfg.c());
+        
+        
+    </script>
+    </body>
+</html>

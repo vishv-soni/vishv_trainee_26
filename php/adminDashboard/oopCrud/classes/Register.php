@@ -86,15 +86,15 @@ class Register
             }
         } else {
             $_SESSION['errors'] = [
-                    'general' => $generalErrors,
-                    'password' => $passwordErrors,
-                    'confirmPassword' => $confirmPasswordError
+                'general' => $generalErrors,
+                'password' => $passwordErrors,
+                'confirmPassword' => $confirmPasswordError
             ];
             ?>
-                <script>
-                    window.location.href = "/vishv_trainee_26/php/adminDashboard/oopCrud/addUser.php";
-                </script>
-            <?php
+            <script>
+                window.location.href = "/vishv_trainee_26/php/adminDashboard/oopCrud/addUser.php";
+            </script>
+        <?php
         }
     }
 
@@ -129,6 +129,12 @@ class Register
         $oopConfirmPasswordError = '';
         $oopGeneralErrors = [];
 
+        if (empty($fname) || empty($lname) || empty($email) || empty($pass) || empty($address)) {
+            $oopGeneralErrors[] = "All fields are required.";
+        }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $oopGeneralErrors[] = "Invalid email format.";
+        }
         if (!preg_match('/^[0-9]{10}+$/', $phone)) {
             $oopGeneralErrors[] = "Invalid Phone Number format.";
         }
@@ -186,7 +192,7 @@ class Register
                     'confirmPassword' => $oopConfirmPasswordError
                 ]
             ];
-            ?>
+        ?>
             <script>
                 window.location.href = "/vishv_trainee_26/php/adminDashboard/oopCrud/edit.php?id=<?php echo intval($id); ?>";
             </script>

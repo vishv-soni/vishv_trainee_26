@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $register = $register->editRegister($id, $_POST, $_FILES);
 }
 ?>
+
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
@@ -71,6 +72,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 name="first_name"
                                                 value="<?php echo $old['first_name'] ?? $data['first_name']; ?>"
                                                 class="form-control" />
+                                            <?php
+                                            if (!empty($errors['general']) && in_array("All fields are required.", $errors['general'])) {
+                                                foreach ($errors['general'] as $err) {
+                                                    if ($err === "All fields are required.") {
+                                                        echo "<p style='color:red'>$err</p>";
+                                                    }
+                                                }
+                                            }
+                                            ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -82,6 +92,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 value="<?php echo $old['last_name'] ?? $data['last_name']; ?>"
                                                 class="form-control"
                                                 id="lastName" />
+                                            <?php
+                                            if (!empty($errors['general']) && in_array("All fields are required.", $errors['general'])) {
+                                                foreach ($errors['general'] as $err) {
+                                                    if ($err === "All fields are required.") {
+                                                        echo "<p style='color:red'>$err</p>";
+                                                    }
+                                                }
+                                            }
+                                            ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -97,6 +116,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <div id="emailHelp" class="form-text">
                                                 We'll never share your email with anyone else.
                                             </div>
+                                            <?php
+                                            if (!empty($errors['general']) && in_array("Invalid email format.", $errors['general'])) {
+                                                foreach ($errors['general'] as $err) {
+                                                    if ($err === "Invalid email format.") {
+                                                        echo "<p style='color:red'>$err</p>";
+                                                    }
+                                                }
+                                            }
+                                            ?>
 
                                         </div>
 
@@ -106,6 +134,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <input type="password" class="form-control"
                                                 name="password" minlength="8" autocomplete="off" />
                                             <?php
+                                            if (!empty($errors['general']) && in_array("All fields are required.", $errors['general'])) {
+                                                foreach ($errors['general'] as $err) {
+                                                    if ($err === "All fields are required.") {
+                                                        echo "<p style='color:red'>$err</p>";
+                                                    }
+                                                }
+                                            }
                                             if (!empty($errors['password'])) {
                                                 foreach ($errors['password'] as $err) {
                                                     echo "<p style='color:red'>$err</p>";
@@ -138,6 +173,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <span class="input-group-text">Address</span>
                                             <textarea class="form-control"
                                                 aria-label="With textarea" name="address"><?php echo $old['address'] ?? $data['address']; ?></textarea>
+                                            <?php
+                                            if (!empty($errors['general']) && in_array("All fields are required.", $errors['general'])) {
+                                                foreach ($errors['general'] as $err) {
+                                                    if ($err === "All fields are required.") {
+                                                        echo "<p style='color:red'>$err</p>";
+                                                    }
+                                                }
+                                            }
+                                            ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -149,9 +193,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 class="form-control"
                                                 id="phone" />
                                             <?php
-                                            if (!empty($errors['general'])) {
+                                            if (!empty($errors['general']) && in_array("Invalid Phone Number format.", $errors['general'])) {
                                                 foreach ($errors['general'] as $err) {
-                                                    echo "<p style='color:red'>$err</p>";
+                                                    if ($err === "Invalid Phone Number format.") {
+                                                        echo "<p style='color:red'>$err</p>";
+                                                    }
                                                 }
                                             }
                                             ?>

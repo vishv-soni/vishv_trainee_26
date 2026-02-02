@@ -118,17 +118,15 @@
                     <label for="exampleInputPassword1"
                       class="form-label">Password</label>
                     <input type="password" class="form-control"
-                      name="password" minlength="8" required id="exampleInputPassword1" required />
+                      name="password" minlength="8" id="exampleInputPassword1" />
                     <p style='color: red;'><?php echo $_SESSION['password_errors'] ?? ''; ?></p>
                     <?php unset($_SESSION['password_errors']); ?>
-
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1"
                       class="form-label">Confirm Password</label>
                     <input type="password" class="form-control"
-                      name="confirm_password" required id="exampleInputPassword1"
-                      required />
+                      name="confirm_password" id="exampleInputPassword1" />
                     <p style='color: red;'><?php echo $_SESSION['confirm_password_error'] ?? ''; ?></p>
                     <?php unset($_SESSION['confirm_password_error']); ?>
                   </div>

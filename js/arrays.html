@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+        // Creating an Empty Array
+        let emptyArray = [];
+        console.log(emptyArray);
+
+        // Creating an Array and Initializing with Values
+        let numberArray = [10, 20, 30];
+        console.log(numberArray);
+
+        // Creating and Initializing an array with values
+        let numberArrayAlt = new Array(10, 20, 30);
+        console.log(numberArrayAlt);
+
+        // Creating an Array and Initializing with Values
+        let techStack = ["HTML", "CSS", "JS"];
+        // Accessing Array Elements
+        console.log(techStack[0]);
+        console.log(techStack[1]);
+
+        // Modifying Array Elements
+        let techStackUpdated = ["HTML", "CSS", "JS"];
+        console.log(techStackUpdated);
+        techStackUpdated[1] = "Bootstrap";
+        console.log(techStackUpdated);
+
+        // push() and unshift()
+        let techStackAdd = ["HTML", "CSS", "JS"];
+        techStackAdd.push("Node.js");
+        techStackAdd.unshift("Web Development");
+        console.log(techStackAdd);
+
+        // pop(), shift(), splice()
+        let techStackRemove = ["HTML", "CSS", "JS"];
+        console.log("Original Array:", techStackRemove);
+
+        let lastElement = techStackRemove.pop();
+        console.log("After Removing the Last:", techStackRemove);
+
+        let firstElement = techStackRemove.shift();
+        console.log("After Removing the First:", techStackRemove);
+
+        techStackRemove.splice(1, 2);
+        console.log("After Removing 2 elements from index 1:", techStackRemove);
+
+        // length property
+        let techStackLength = ["HTML", "CSS", "JS"];
+        let arrayLength = techStackLength.length;
+        console.log("Array Length:", arrayLength);
+
+        // Modifying array length
+        let techStackResize = ["HTML", "CSS", "JS"];
+        techStackResize.length = 7;
+        console.log("After Increasing Length:", techStackResize);
+
+        techStackResize.length = 2;
+        console.log("After Decreasing Length:", techStackResize);
+
+        // for loop and forEach loop
+        let techStackLoop = ["HTML", "CSS", "JS"];
+
+        for (let i = 0; i < techStackLoop.length; i++) {
+            console.log(techStackLoop[i]);
+        }
+
+        techStackLoop.forEach(function printItem(item) {
+            console.log(item);
+        });
+
+        // concat()
+        let frontEndTech = ["HTML", "CSS", "JS", "React"];
+        let backEndTech = ["Node.js", "Express.js"];
+        let fullStackTech = frontEndTech.concat(backEndTech);
+        console.log("Concatenated Array:", fullStackTech);
+
+        // toString()
+        let stringArray = ["HTML", "CSS", "JS"];
+        console.log(stringArray.toString());
+        console.log(typeof stringArray);
+
+        // Array.isArray() and instanceof
+        const courseList = ["HTML", "CSS", "Javascript"];
+        console.log("Using Array.isArray():", Array.isArray(courseList));
+        console.log("Using instanceof:", courseList instanceof Array);
+
+        // join()
+        let joinExample = ["HTML", "CSS", "JS", "React"];
+        console.log(joinExample.join("|"));
+
+        // flat()
+        const nestedArray = [['1', '2'], ['3', '4', '5', ['6'], '7']];
+        const flatArray = nestedArray.flat(Infinity);
+        console.log(flatArray);
+
+        // some()
+        const numberCheckArray = [1, 2, 3, 4, 5];
+        let hasGreaterThanFour = numberCheckArray.some(val => val > 4);
+        console.log(hasGreaterThanFour);
+
+        // map()
+        let squareNumbers = [4, 9, 16, 25];
+        let squareRoots = squareNumbers.map(Math.sqrt);
+        console.log(squareRoots);
+
+        // filter()
+        let filterNumbers = [1, 2, 3, 4, 5];
+        let filteredResult = filterNumbers.filter(num => num > 1);
+        console.log(filteredResult);
+
+        // reduce()
+        let reduceNumbers = [1, 2, 3, 4];
+        let sumResult = reduceNumbers.reduce(
+            (accumulator, currentValue) => accumulator + currentValue
+        );
+        console.log(sumResult);
+
+        // reverse()
+        let reverseArray = [1, 2, 3, 4, 5];
+        reverseArray.reverse();
+        console.log(reverseArray);
+
+        // values()
+        let valuesArray = ['a', 'b', 'c'];
+        let arrayIterator = valuesArray.values();
+
+        for (let value of arrayIterator) {
+            console.log(value);
+        }
+
+    </script>
+    </body>
+</html>
