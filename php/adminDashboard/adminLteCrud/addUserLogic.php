@@ -25,14 +25,27 @@ if (isset($_POST['submit'])) {
     $tmp_name = $_FILES['profile_image']['tmp_name'];
     move_uploaded_file($tmp_name, "uploads/" . $img_name);
 
-    if (empty($fname) || empty($lname) || empty($email) || empty($pass)) {
-        $generalErrors[] = "All fields are required.";
+    if (empty($fname)) {
+        $generalErrors['firstName'] = "First name is required.";
     }
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $generalErrors[] = "Invalid email format.";
+    if (empty($lname)) {
+        $generalErrors['lastName'] = "Last name is required.";
     }
-    if (!preg_match('/^[0-9]{10}+$/', $phone)) {
-        $generalErrors[] = "Invalid Phone Number format.";
+    if (empty($address)) {
+        $generalErrors['address'] = "address is required.";
+    }
+    if (empty($email)) {
+        $generalErrors['email'] = "Email is required";
+    } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $generalErrors['email'] = "Invalid email format.";
+    }
+    if (empty($phone)) {
+        $generalErrors['phone'] = "Phone is required";
+    } else if (!preg_match('/^[0-9]{10}+$/', $phone)) {
+        $generalErrors['phone'] = "Invalid Phone Number format.";
+    }
+    if ($_FILES['profile_image']['error'] === UPLOAD_ERR_NO_FILE) {
+        $generalErrors['pImg'] = " No file selected. The file field is required.";
     }
     // Check if email already exists
     if (mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users WHERE email='$email'")) > 0) {
@@ -44,24 +57,14 @@ if (isset($_POST['submit'])) {
         $passwordErrors[] = "Password is required.";
     } else {
         // If the password is not empty, check individual constraints
-        if (strlen($pass) < 8) {
-            $passwordErrors[] = "Password must be at least 8 characters long.";
-        }
-        if (!preg_match("#[A-Z]+#", $pass)) {
-            $passwordErrors[] = "Password must contain at least 1 uppercase letter.";
-        }
-        if (!preg_match("#[a-z]+#", $pass)) {
-            $passwordErrors[] = "Password must contain at least 1 lowercase letter.";
-        }
-        if (!preg_match("#[0-9]+#", $pass)) {
-            $passwordErrors[] = "Password must contain at least 1 number.";
-        }
-        if (!preg_match("/[\W]+/", $pass)) {
-            $passwordErrors[] = "Password must contain at least 1 special character.";
+        if (strlen($pass) < 8 || !preg_match("#[A-Z]+#", $pass) || !preg_match("#[a-z]+#", $pass) || !preg_match("#[0-9]+#", $pass) || !preg_match("/[\W]+/", $pass)) {
+            $passwordErrors[] = "Password must be at least 8 characters long, 1 uppercase letter, 1 lowercase letter, 1 special character.";
         }
     }
-    if (empty($passwordErrors) && !empty($pass) && !empty($cpass)) {
-        if ($pass !== $cpass) {
+    if (!empty($pass)) {
+        if (empty($cpass)) {
+            $confirmPasswordError = "Confirm passwords is required!";
+        } else if ($pass !== $cpass) {
             $confirmPasswordError = "Passwords do not match!";
         }
     }
@@ -75,20 +78,14 @@ if (isset($_POST['submit'])) {
         mysqli_query($conn, $sql);
 
         header("Location: view.php");
+        exit;
     } else {
-        if (!empty($generalErrors)) {
-            foreach ($generalErrors as $error) {
-                $_SESSION['general_errors'] = $error;
-            }
-        }
-        if (!empty($passwordErrors)) {
-            foreach ($passwordErrors as $error) {
-                $_SESSION['password_errors'] = $error;
-            }
-        }
-        if (!empty($confirmPasswordError)) {
-            $_SESSION['confirm_password_error'] = $confirmPasswordError;
-        }
+        $_SESSION['errors'] = [
+            'old' => $_POST,
+            'general' => $generalErrors,
+            'password' => $passwordErrors,
+            'confirmPassword' => $confirmPasswordError
+        ];
         header("Location: addUser.php");
         exit();
     }

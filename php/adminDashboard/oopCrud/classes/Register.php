@@ -16,11 +16,11 @@ class Register
         $lname = $data['last_name'];
         $email = $data['email'];
         $password = $data['password'];
-        $confirmPassword = $data['confirm_password'];
+        $confirmPassword = $data['confirmPassword'];
 
         $profileImage = $file['profile_image']['name'];
         $tmp_name = $file['profile_image']['tmp_name'];
-        $path = "upload/" . $profileImage;
+        $path = __DIR__ . "/../upload/" . $profileImage;
         move_uploaded_file($tmp_name, $path);
 
         $address = $data['address'];
@@ -32,9 +32,35 @@ class Register
         $confirmPasswordError = '';
         $generalErrors = [];
 
-        if (!preg_match('/^[0-9]{10}+$/', $phone)) {
-            $generalErrors[] = "Invalid Phone Number format.";
+        if (empty($fname)) {
+            $generalErrors['firstName'] = "First name is required.";
         }
+        if (empty($lname)) {
+            $generalErrors['lastName'] = "Last name is required.";
+        }
+        if (empty($address)) {
+            $generalErrors['address'] = "address is required.";
+        }
+        if (empty($email)) {
+            $generalErrors['email'] = "Email is required";
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $generalErrors['email'] = "Invalid email format.";
+        }
+        if (empty($phone)) {
+            $generalErrors['phone'] = "Phone is required";
+        } else if (!preg_match('/^[0-9]{10}+$/', $phone)) {
+            $generalErrors['phone'] = "Invalid Phone Number format.";
+        }
+         if ($_FILES['profile_image']['error'] === UPLOAD_ERR_NO_FILE) {
+        $generalErrors['pImg'] = " No file selected. The file field is required.";
+    }
+     if (isset($_POST['hobby']) && $_POST['hobby'] == 'Reading') {
+        // Checkbox is checked and value is correct
+        echo "checked";
+        // Proceed with saving to the database, sending emails, etc.
+    } else {
+         $generalErrors['hobby'] = "Hobbies required";
+    }
         // Check if email already exists
         $query = "SELECT id FROM users WHERE email='$email'";
         $result = $this->db->select($query);
@@ -46,27 +72,18 @@ class Register
             $passwordErrors[] = "Password is required.";
         } else {
             // If the password is not empty, check individual constraints
-            if (strlen($password) < 8) {
-                $passwordErrors[] = "Password must be at least 8 characters long.";
-            }
-            if (!preg_match("#[A-Z]+#", $password)) {
-                $passwordErrors[] = "Password must contain at least 1 uppercase letter.";
-            }
-            if (!preg_match("#[a-z]+#", $password)) {
-                $passwordErrors[] = "Password must contain at least 1 lowercase letter.";
-            }
-            if (!preg_match("#[0-9]+#", $password)) {
-                $passwordErrors[] = "Password must contain at least 1 number.";
-            }
-            if (!preg_match("/[\W]+/", $password)) {
-                $passwordErrors[] = "Password must contain at least 1 special character.";
+            if (strlen($password) < 8 || !preg_match("#[A-Z]+#", $password) || !preg_match("#[a-z]+#", $password) || !preg_match("#[0-9]+#", $password) || !preg_match("/[\W]+/", $password)) {
+                $passwordErrors[] = "Password must be at least 8 characters long, 1 uppercase letter, 1 lowercase letter, 1 special character.";
             }
         }
-        if (empty($passwordErrors) && !empty($password) && !empty($confirmPassword)) {
-            if ($password !== $confirmPassword) {
+        if (!empty($password)) {
+            if (empty($confirmPassword)) {
+                $confirmPasswordError = "Confirm passwords is required!";
+            } else if ($password !== $confirmPassword) {
                 $confirmPasswordError = "Passwords do not match!";
             }
         }
+
         if (empty($passwordErrors) && empty($confirmPasswordError) && empty($generalErrors)) {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -86,6 +103,7 @@ class Register
             }
         } else {
             $_SESSION['errors'] = [
+                'old' => $data,
                 'general' => $generalErrors,
                 'password' => $passwordErrors,
                 'confirmPassword' => $confirmPasswordError
@@ -123,37 +141,37 @@ class Register
         $hobby = !empty($data['hobby']) ? implode(",", $data['hobby']) : '';
         $country = $data['country'];
         $pass = $data['password'];
-        $cpass = $data['confirm_password'];
+        $cpass = $data['confirmPassword'];
         $email = $data['email'];
         $oopPasswordErrors = [];
         $oopConfirmPasswordError = '';
         $oopGeneralErrors = [];
 
-        if (empty($fname) || empty($lname) || empty($email) || empty($pass) || empty($address)) {
-            $oopGeneralErrors[] = "All fields are required.";
+        if (empty($fname)) {
+            $oopGeneralErrors['firstName'] = "First name is required.";
         }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $oopGeneralErrors[] = "Invalid email format.";
+        if (empty($lname)) {
+            $oopGeneralErrors['lastName'] = "Last name is required.";
         }
-        if (!preg_match('/^[0-9]{10}+$/', $phone)) {
-            $oopGeneralErrors[] = "Invalid Phone Number format.";
+        if (empty($address)) {
+            $oopGeneralErrors['address'] = "address is required.";
         }
-        if (!empty($pass)) {
+        if (empty($email)) {
+            $oopGeneralErrors['email'] = "Email is required";
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $oopGeneralErrors['email'] = "Invalid email format.";
+        }
+        if (empty($phone)) {
+            $oopGeneralErrors['phone'] = "Phone is required";
+        } else if (!preg_match('/^[0-9]{10}+$/', $phone)) {
+            $oopGeneralErrors['phone'] = "Invalid Phone Number format.";
+        }
+        if (empty($pass)) {
+            $oopPasswordErrors[] = "Password is required.";
+        } else {
             // If the password is not empty, check individual constraints
-            if (strlen($pass) < 8) {
-                $oopPasswordErrors[] = "Password must be at least 8 characters long.";
-            }
-            if (!preg_match("#[A-Z]+#", $pass)) {
-                $oopPasswordErrors[] = "Password must contain at least 1 uppercase letter.";
-            }
-            if (!preg_match("#[a-z]+#", $pass)) {
-                $oopPasswordErrors[] = "Password must contain at least 1 lowercase letter.";
-            }
-            if (!preg_match("#[0-9]+#", $pass)) {
-                $oopPasswordErrors[] = "Password must contain at least 1 number.";
-            }
-            if (!preg_match("/[\W]+/", $pass)) {
-                $oopPasswordErrors[] = "Password must contain at least 1 special character.";
+            if (strlen($pass) < 8 || !preg_match("#[A-Z]+#", $pass) || !preg_match("#[a-z]+#", $pass) || !preg_match("#[0-9]+#", $pass) || !preg_match("/[\W]+/", $pass)) {
+                $oopPasswordErrors[] = "Password must be at least 8 characters long, 1 uppercase letter, 1 lowercase letter, 1 special character.";
             }
         }
 
@@ -168,26 +186,31 @@ class Register
         country='$country'";
 
         if (!empty($file['profile_image']['name'])) {
-            $profileImage = $file['profile_image']['name'];
+            $profileImage = time() . '_' . $file['profile_image']['name'];
             $tmpName = $file['profile_image']['tmp_name'];
-            $path = "upload/" . $profileImage;
+            $path = __DIR__ . "/../upload/" . $profileImage;
+
             if (move_uploaded_file($tmpName, $path)) {
-                $query .= ", profile_image='$profileImage' ";
+                $query .= ", profile_image='$profileImage'";
             }
         }
-        if (empty($oopPasswordErrors) && !empty($pass) && !empty($cpass)) {
-            if ($pass !== $cpass) {
+
+        if (!empty($pass)) {
+            if (empty($cpass)) {
+                $oopConfirmPasswordError = "Confirm passwords is required!";
+            } else if ($pass !== $cpass) {
                 $oopConfirmPasswordError = "Passwords do not match!";
             }
+            if (empty($oopPasswordErrors) && empty($oopConfirmPasswordError)) {
+                $password = password_hash($pass, PASSWORD_DEFAULT);
+                $query .= ", password='$password'";
+            }
         }
-        if (empty($oopPasswordErrors) && empty($oopConfirmPasswordError) && empty($oopGeneralErrors)) {
-            $password = password_hash($pass, PASSWORD_DEFAULT);
-            $query .= ", password='$password'";
-        } else {
+        if (!empty($oopPasswordErrors) || !empty($oopConfirmPasswordError) || !empty($oopGeneralErrors)) {
             $_SESSION['flash'] = [
                 'old' => $data,
+                'generalError' => $oopGeneralErrors,
                 'errors' => [
-                    'general' => $oopGeneralErrors,
                     'password' => $oopPasswordErrors,
                     'confirmPassword' => $oopConfirmPasswordError
                 ]
@@ -197,7 +220,9 @@ class Register
                 window.location.href = "/vishv_trainee_26/php/adminDashboard/oopCrud/edit.php?id=<?php echo intval($id); ?>";
             </script>
         <?php
+            exit;
         }
+
         $query .= " WHERE id='$id'";
         $result = $this->db->insert($query);
 
@@ -207,6 +232,7 @@ class Register
                 window.location.href = "/vishv_trainee_26/php/adminDashboard/oopCrud/index.php";
             </script>
 <?php
+            exit;
         }
     }
 
@@ -221,3 +247,4 @@ class Register
         }
     }
 }
+    

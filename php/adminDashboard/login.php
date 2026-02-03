@@ -1,5 +1,7 @@
 <?php
 session_start();
+$errors = $_SESSION['errors'] ?? [];
+unset($_SESSION['errors']);
 ?>
 <!doctype html>
 <html lang="en">
@@ -96,6 +98,7 @@ session_start();
                         <!--begin::Col-->
                         <div class="col-md-5">
                             <!--begin::Quick Example-->
+                            <p style='color: green;'><?php echo $_SESSION['registerMsg']; ?></p>
                             <div class="card card-primary card-outline mb-4">
                                 <!--begin::Header-->
                                 <!-- <div class="card-header">
@@ -112,7 +115,6 @@ session_start();
                                             <input
                                                 type="email"
                                                 name="email"
-                                                required
                                                 value="<?php echo $data['email']; ?>"
                                                 class="form-control"
                                                 id="exampleInputEmail1"
@@ -120,15 +122,20 @@ session_start();
                                             <div id="emailHelp" class="form-text">
                                                 We'll never share your email with anyone else.
                                             </div>
+                                            <?php if (!empty($errors['email'])) { ?>
+                                                <p style="color:red"><?= $errors['email']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
-                                                name="password" required value="<?php echo $data['password']; ?>" />
-                                                <p style='color: red;'><?php echo $_SESSION['authLogin']; ?></p>
-                                                <?php unset($_SESSION['authLogin']); ?>
+                                                name="password" value="<?php echo $data['password']; ?>" />
+                                            <?php if (!empty($errors['pass'])) { ?>
+                                                <p style="color:red"><?= $errors['pass']; ?></p>
+                                            <?php }; ?>
+
                                         </div>
                                     </div>
                                     <!--end::Body-->

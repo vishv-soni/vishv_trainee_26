@@ -4,8 +4,11 @@ require 'auth.php';
 include_once('../includes/header.php');
 include_once('../includes/sidebar.php');
 
-$old = $_SESSION['old'] ?? [];
-unset($_SESSION['old']);
+$flash = $_SESSION['flash'] ?? [];
+$old = $flash['editOld'] ?? [];
+$generalErrors = $flash['editGeneralError'] ?? [];
+$errors = $flash['editErrors'] ?? [];
+unset($_SESSION['flash']);
 
 $id = $_GET['id'] ?? 0;
 $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id"));
@@ -63,8 +66,10 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                 type="text"
                                                 name="first_name"
                                                 value="<?php echo $old['first_name'] ?? $data['first_name']; ?>"
-                                                class="form-control" required/>
-
+                                                class="form-control" />
+                                                  <?php if (!empty($generalErrors['firstName'])) { ?>
+                                                <p style="color:red"><?= $generalErrors['firstName']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -75,7 +80,10 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                 name="last_name"
                                                 value="<?php echo $old['last_name'] ?? $data['last_name']; ?>"
                                                 class="form-control"
-                                                id="lastName" required/>
+                                                id="lastName" />
+                                                <?php if (!empty($generalErrors['lastName'])) { ?>
+                                                <p style="color:red"><?= $generalErrors['lastName']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -87,42 +95,55 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                 value="<?php echo $old['email'] ?? $data['email']; ?>"
                                                 class="form-control"
                                                 id="exampleInputEmail1"
-                                                aria-describedby="emailHelp" required/>
+                                                aria-describedby="emailHelp" />
                                             <div id="emailHelp" class="form-text">
                                                 We'll never share your email with anyone else.
                                             </div>
-
+                                            <?php if (!empty($generalErrors['email'])) { ?>
+                                                <p style="color:red"><?= $generalErrors['email']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
-                                                name="password" minlength="8" autocomplete="off" />
-                                            <p style='color: red;'><?php echo $_SESSION['password_errors'] ?? ''; ?></p>
-                                            <?php unset($_SESSION['password_errors']); ?>
+                                                name="password" minlength="8" autocomplete="off" value="<?php echo $old['password']?>" />
+                                            <?php
+                                            if (!empty($errors['password'])) {
+                                                foreach ($errors['password'] as $err) {
+                                                    echo "<p style='color:red'>$err</p>";
+                                                }
+                                            }
+                                            ?>
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Confirm Password</label>
                                             <input type="password" class="form-control"
                                                 name="confirm_password" minlength="8" id="exampleInputPassword1" autocomplete="off" />
-                                            <p style='color: red;'><?php echo $_SESSION['confirm_password_error'] ?? ''; ?></p>
-                                            <?php unset($_SESSION['confirm_password_error']); ?>
+                                            <?php
+                                            if (!empty($errors['confirmPassword'])) {
+                                                    echo "<p style='color:red'>{$errors['confirmPassword']}</p>";
+                                            }
+                                            ?>
                                         </div>
 
                                         <div class="input-group mb-3">
 
                                             <input type="file" name="profile_image"
-                                                class="form-control" id="inputGroupFile02" required/>
+                                                class="form-control" id="inputGroupFile02" />
                                             <label class="input-group-text"
-                                                for="inputGroupFile02"> <img src="uploads/<?php echo $data['profile_image']; ?>" width="50" height="50" class="rounded-circle"></label>
+                                                for="inputGroupFile02"> <img src="uploads/<?php echo $old['address'] ?? $data['profile_image']; ?>" width="50" height="50" class="rounded-circle"></label>
                                         </div>
 
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Address</span>
-                                            <textarea required class="form-control"
+                                            <textarea class="form-control"
                                                 aria-label="With textarea" name="address"><?php echo $old['address'] ?? $data['address']; ?></textarea>
+                                                <?php if (!empty($generalErrors['address'])){ ?>
+                                                <p style="color:red"><?= $generalErrors['address']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -132,9 +153,10 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                 name="phone"
                                                 value="<?php echo $old['phone'] ?? $data['phone']; ?>"
                                                 class="form-control"
-                                                id="phone" required/>
-                                            <p style='color: red;'><?php echo $_SESSION['general_errors'] ?? ''; ?></p>
-                                            <?php unset($_SESSION['general_errors']); ?>
+                                                id="phone" />
+                                            <?php if (!empty($generalErrors['phone'])){ ?>
+                                                <p style="color:red"><?= $generalErrors['phone']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <fieldset class="row mb-3">
@@ -142,7 +164,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                 class="col-form-label col-sm-2 pt-0">Gender</legend>
                                             <div class="col-sm-10">
                                                 <div class="form-check">
-                                                    <input required
+                                                    <input 
                                                         class="form-check-input"
                                                         type="radio"
                                                         name="gender"
@@ -154,7 +176,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                         Male </label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input required
+                                                    <input 
                                                         class="form-check-input"
                                                         type="radio"
                                                         name="gender"
@@ -166,7 +188,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                                         Female </label>
                                                 </div>
                                                 <div class="form-check mb-3">
-                                                    <input required
+                                                    <input 
                                                         class="form-check-input"
                                                         type="radio"
                                                         name="gender"
@@ -183,7 +205,7 @@ $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id
                                         hobby
                                         <?php $h = explode(",", $data['hobby']); ?>
                                         <div class="mb-3 form-check">
-                                            <input type="checkbox" class="form-check-input"
+                                            <input <?php if ($data['country'] == "India") ?> type="checkbox" class="form-check-input"
                                                 name="hobby[]" value="Reading" <?php if (in_array("Reading", $h)) echo "checked"; ?>>
                                             <label class="form-check-label"
                                                 for="exampleCheck2">Reading</label>

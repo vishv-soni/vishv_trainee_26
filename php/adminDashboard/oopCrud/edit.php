@@ -1,4 +1,5 @@
 <?php
+session_start();
 require '../adminLteCrud/auth.php';
 include_once('../includes/header.php');
 include_once('../includes/sidebar.php');
@@ -6,6 +7,7 @@ include 'classes/Register.php';
 
 $flash = $_SESSION['flash'] ?? [];
 $old = $flash['old'] ?? [];
+$generalErrors = $flash['generalError'] ?? [];
 $errors = $flash['errors'] ?? [];
 unset($_SESSION['flash']);
 
@@ -72,15 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 name="first_name"
                                                 value="<?php echo $old['first_name'] ?? $data['first_name']; ?>"
                                                 class="form-control" />
-                                            <?php
-                                            if (!empty($errors['general']) && in_array("All fields are required.", $errors['general'])) {
-                                                foreach ($errors['general'] as $err) {
-                                                    if ($err === "All fields are required.") {
-                                                        echo "<p style='color:red'>$err</p>";
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                                            <?php if (!empty($generalErrors['firstName'])) { ?>
+                                                <p style="color:red"><?= $generalErrors['firstName']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -92,15 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 value="<?php echo $old['last_name'] ?? $data['last_name']; ?>"
                                                 class="form-control"
                                                 id="lastName" />
-                                            <?php
-                                            if (!empty($errors['general']) && in_array("All fields are required.", $errors['general'])) {
-                                                foreach ($errors['general'] as $err) {
-                                                    if ($err === "All fields are required.") {
-                                                        echo "<p style='color:red'>$err</p>";
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                                            <?php if (!empty($generalErrors['lastName'])) { ?>
+                                                <p style="color:red"><?= $generalErrors['lastName']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -116,15 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <div id="emailHelp" class="form-text">
                                                 We'll never share your email with anyone else.
                                             </div>
-                                            <?php
-                                            if (!empty($errors['general']) && in_array("Invalid email format.", $errors['general'])) {
-                                                foreach ($errors['general'] as $err) {
-                                                    if ($err === "Invalid email format.") {
-                                                        echo "<p style='color:red'>$err</p>";
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                                            <?php if (!empty($generalErrors['email'])) { ?>
+                                                <p style="color:red"><?= $generalErrors['email']; ?></p>
+                                            <?php }; ?>
 
                                         </div>
 
@@ -132,15 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
-                                                name="password" minlength="8" autocomplete="off" />
+                                                name="password" minlength="8" autocomplete="off"  value="<?php echo $old['password']?>" />
                                             <?php
-                                            if (!empty($errors['general']) && in_array("All fields are required.", $errors['general'])) {
-                                                foreach ($errors['general'] as $err) {
-                                                    if ($err === "All fields are required.") {
-                                                        echo "<p style='color:red'>$err</p>";
-                                                    }
-                                                }
-                                            }
                                             if (!empty($errors['password'])) {
                                                 foreach ($errors['password'] as $err) {
                                                     echo "<p style='color:red'>$err</p>";
@@ -152,12 +129,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Confirm Password</label>
                                             <input type="password" class="form-control"
-                                                name="confirm_password" minlength="8" id="exampleInputPassword1" autocomplete="off" />
+                                                name="confirmPassword" id="exampleInputPassword1" autocomplete="off" />
                                             <?php
                                             if (!empty($errors['confirmPassword'])) {
-                                                foreach ($errors['confirmPassword'] as $err) {
-                                                    echo "<p style='color:red'>$err</p>";
-                                                }
+                                                    echo "<p style='color:red'>{$errors['confirmPassword']}</p>";
                                             }
                                             ?>
                                         </div>
@@ -166,22 +141,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <input type="file" name="profile_image"
                                                 class="form-control" id="inputGroupFile02" />
                                             <label class="input-group-text"
-                                                for="inputGroupFile02"> <img src="upload/<?php echo $old['profile_image'] ?? $data['profile_image']; ?>" width="50" height="50" class="rounded-circle"></label>
+                                                for="inputGroupFile02"> <img src="upload/<?php echo $data['profile_image']; ?>" width="50" height="50" class="rounded-circle"></label>
                                         </div>
 
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Address</span>
                                             <textarea class="form-control"
                                                 aria-label="With textarea" name="address"><?php echo $old['address'] ?? $data['address']; ?></textarea>
-                                            <?php
-                                            if (!empty($errors['general']) && in_array("All fields are required.", $errors['general'])) {
-                                                foreach ($errors['general'] as $err) {
-                                                    if ($err === "All fields are required.") {
-                                                        echo "<p style='color:red'>$err</p>";
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                                            <?php if (!empty($generalErrors['address'])){ ?>
+                                                <p style="color:red"><?= $generalErrors['address']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <div class="mb-3">
@@ -192,15 +161,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 value="<?php echo $old['phone'] ?? $data['phone']; ?>"
                                                 class="form-control"
                                                 id="phone" />
-                                            <?php
-                                            if (!empty($errors['general']) && in_array("Invalid Phone Number format.", $errors['general'])) {
-                                                foreach ($errors['general'] as $err) {
-                                                    if ($err === "Invalid Phone Number format.") {
-                                                        echo "<p style='color:red'>$err</p>";
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                                            <?php if (!empty($generalErrors['phone'])){ ?>
+                                                <p style="color:red"><?= $generalErrors['phone']; ?></p>
+                                            <?php }; ?>
                                         </div>
 
                                         <fieldset class="row mb-3">

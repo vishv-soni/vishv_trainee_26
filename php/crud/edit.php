@@ -35,6 +35,7 @@ $id = $_GET['id'];
 $data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM users WHERE id=$id"));
 
 if (isset($_POST['update'])) {
+    echo "ajlfl"; die();
     $fname   = $_POST['first_name'];
     $lname   = $_POST['last_name'];
     $address = $_POST['address'];
@@ -45,6 +46,7 @@ if (isset($_POST['update'])) {
     $pass = $_POST['password'];
     $cpass = $_POST['cpass'];
     $email = $_POST['email'];
+
 
      if ($pass !== $cpass) {
         die("Password do not match!");

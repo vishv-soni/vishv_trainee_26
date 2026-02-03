@@ -1,4 +1,9 @@
-<?php session_start(); ?>
+<?php session_start();
+$errors = $_SESSION['errors'] ?? [];
+$old = $errors['old'] ?? [];
+$generalErrors = $errors['general'] ?? [];
+unset($_SESSION['errors']);
+?>
 <!doctype html>
 <html lang="en">
 
@@ -85,8 +90,11 @@
                     <input
                       type="text"
                       name="first_name"
-                      class="form-control"
-                      required />
+                       value="<?php echo $old['first_name']?>"
+                      class="form-control" />
+                    <?php if (!empty($generalErrors['firstName'])) { ?>
+                      <p style="color:red"><?= $generalErrors['firstName']; ?></p>
+                    <?php }; ?>
                   </div>
                   <div class="mb-3">
                     <label for="lastName" class="form-label">Last
@@ -94,9 +102,12 @@
                     <input
                       type="text"
                       name="last_name"
+                      value="<?php echo $old['last_name']?>"
                       class="form-control"
-                      id="lastName"
-                      required />
+                      id="lastName" />
+                    <?php if (!empty($generalErrors['lastName'])) { ?>
+                      <p style="color:red"><?= $generalErrors['lastName']; ?></p>
+                    <?php }; ?>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Email
@@ -104,31 +115,40 @@
                     <input
                       type="email"
                       name="email"
+                      value="<?php echo $old['email']?>"
                       class="form-control"
                       id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
-                      required />
+                      aria-describedby="emailHelp" />
                     <div id="emailHelp" class="form-text">
                       We'll never share your email with anyone else.
                     </div>
-                    <p style='color: red;'><?php echo $_SESSION['general_errors'] ?? ''; ?></p>
-                    <?php unset($_SESSION['general_errors']); ?>
+                    <?php if (!empty($generalErrors['email'])) { ?>
+                      <p style="color:red"><?= $generalErrors['email']; ?></p>
+                    <?php }; ?>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1"
                       class="form-label">Password</label>
                     <input type="password" class="form-control"
-                      name="password" minlength="8" id="exampleInputPassword1" />
-                    <p style='color: red;'><?php echo $_SESSION['password_errors'] ?? ''; ?></p>
-                    <?php unset($_SESSION['password_errors']); ?>
+                      name="password" id="exampleInputPassword1" value="<?php echo $old['password']?>"/>
+                    <?php
+                    if (!empty($errors['password'])) {
+                      foreach ($errors['password'] as $err) {
+                        echo "<p style='color:red'>$err</p>";
+                      }
+                    }
+                    ?>
                   </div>
                   <div class="mb-3">
                     <label for="exampleInputPassword1"
                       class="form-label">Confirm Password</label>
                     <input type="password" class="form-control"
                       name="confirm_password" id="exampleInputPassword1" />
-                    <p style='color: red;'><?php echo $_SESSION['confirm_password_error'] ?? ''; ?></p>
-                    <?php unset($_SESSION['confirm_password_error']); ?>
+                    <?php
+                    if (!empty($errors['confirmPassword'])) {
+                      echo "<p style='color:red'>{$errors['confirmPassword']}</p>";
+                    }
+                    ?>
                   </div>
                 </div>
                 <!--end::Body-->
