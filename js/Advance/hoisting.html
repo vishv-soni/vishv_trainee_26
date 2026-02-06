@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>hoisting</title>
+    </head>
+    <body>
+        <!-- move declaration on top automatically -->
+        <script>
+        //in var case they store undefined in it.
+        console.log(a);
+        var a = 10;
+        console.log(a);
+
+        //throw refrence error  
+        // console.log(b);
+        let b=5;
+        console.log(b);
+
+        //FUNCTION HOISTING
+        hello();
+        function hello(){
+            console.log("hello there!");
+            
+        }
+
+        //FUNCTION EXPRESSION HOISTING
+        // hi();//The variable hello is hoisted, but since it's a function expression, it’s not initialized until the line is executed.
+        var hi = function hi(){
+            console.log("hie there!");
+            
+        }
+
+        //HOISTING WITH LET AND CONST IN FUNCTION refrence error, block scope
+        function hi1(){
+            console.log(c);
+            let c = 10;
+        }
+        // hi1();
+
+        //HOISTING WITH CLASSES
+        // const obj = new myClass();//refrence error
+        // console.log(obj.name);
+        class myClass{
+            constructor(){
+                this.name = "vishv soni";
+            }
+        }
+
+        //Accessing Variables Declared Later in Loops
+        for (var i = 0; i < 3; i++) {
+            setTimeout(() => {
+                console.log(i);
+            }, 100);
+        }
+
+        //Using Hoisted Functions with Parameters
+        hi2(2);
+        function hi2(num){
+            console.log(num);  
+        }
+
+        //HOISTING WITH NESTED FUNCTION
+        function outer() {
+            console.log(a); // undefined
+            var a = 5;
+            function inner() {
+                console.log(b); // undefined
+                var b = 10;
+            }
+            inner();
+        }
+        outer();
+    </script>
+    </body>
+</html>

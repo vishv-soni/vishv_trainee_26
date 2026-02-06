@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
+        </script>
+        <style>
+            .box{
+                width: 100px;
+                height: 100px;
+                background-color: coral;
+            }
+            .ancestors * { 
+                display: block;
+                border: 2px solid lightgrey;
+                color: lightgrey;
+                padding: 5px;
+                margin: 15px;
+            }
+            .descendants * { 
+                display: block;
+                border: 2px solid lightgrey;
+                color: lightgrey;
+                padding: 5px;
+                margin: 15px;
+            }
+            .siblings * { 
+                display: block;
+                border: 2px solid lightgrey;
+                color: lightgrey;
+                padding: 3px;
+                margin: 9px;
+            }
+        </style>
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <p class="first">name 1</p>
+        <p class="second">name 2</p>
+        <p class="third"><span>name 3</span></p>
+        <p class="box">Lorem ipsum dolor sit amet consectetur.</p>
+        <button id="btnHide">toggle</button>
+        <button id="btnFade">fade</button>
+        <button id="btnSlide">slide</button>
+        <button id="btnAnimate">animate</button>
+
+        <form id="Form">
+            <h1>Submit form</h1>
+            <input type="text"><br> <br>
+            <input type="text"><br> <br>
+            <button>Submit</button>
+        </form>
+
+        <!-- //ancenstors -->
+        <h1>ancenstors</h1>
+        <div class="ancestors">
+            <div style="width:500px;">div (grandparent)
+                <p>p (direct parent)
+                    <span class="spanAncenstors">span</span>
+                </p>
+            </div>
+        </div>
+
+        <h1>descendants</h1>
+        <!-- descendants -->
+        <div class="descendants" style="width:500px;">div (current element)
+            <p>p (child)
+                <span class="spanDescendants">span (grandchild)</span>
+            </p>
+        </div>
+
+        <h1>siblings on h2</h1>
+        <div class="siblings">
+            <div>div (parent)
+                <p>p</p>
+                <span>span</span>
+                <h2 class="siblingH2">h2</h2>
+                <h3>h3</h3>
+                <p>p</p>
+            </div>
+        </div>
+
+        <h2>next()</h2>
+        <div class="siblings">
+            <div>div (parent)
+                <p>p</p>
+                <span>span</span>
+                <h2 class="nextH2">h2</h2>
+                <h3>h3</h3>
+                <p>p</p>
+            </div>
+        </div>
+        <h2>nextAll()</h2>
+        <div class="siblings">
+            <div>div (parent)
+                <p>p</p>
+                <span>span</span>
+                <h2 class="nextAllH2">h2</h2>
+                <h3>h3</h3>
+                <p>p</p>
+            </div>
+        </div>
+        <h2>nextUtil()</h2>
+        <div class="siblings">
+            <div>div (parent)
+                <p>p</p>
+                <span>span</span>
+                <h2 class="nextUtilH2">h2</h2>
+                <h3>h3</h3>
+                <h4>h4</h4>
+                <h5>h5</h5>
+                <h6>h6</h6>
+                <p>p</p>
+            </div>
+        </div>
+
+        <script src="jquerys.js"></script>
+    </body>
+
+</html>

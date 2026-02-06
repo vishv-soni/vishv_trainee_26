@@ -64,7 +64,7 @@ $register = new Register();
                                     <td><?= $row['address'] ?></td>
                                     <td>
                                         <button class="badge text-bg-primary"><a style="color: white; padding: 2px; text-decoration: none;" href="edit.php?id=<?= $row['id'] ?>">Edit</a></button>
-                                        <button class="badge text-bg-danger"><a style="color: white; padding: 2px; text-decoration: none;" href="delete.php?id=<?= $row['id'] ?>">Delete</a></button>
+                                        <button class="badge text-bg-danger"><a style="color: white; padding: 2px; text-decoration: none;" href="delete.php?id=<?= $row['id']?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></button>
                                     </td>
                                 </tr>
                             <?php } ?>

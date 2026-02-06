@@ -1,21 +1,9 @@
 <?php
 session_start();
-include_once('db.php');
-require 'auth.php';
+include_once('../adminLteCrud/db.php');
+require '../adminLteCrud/auth.php';
 include_once('../includes/header.php');
 include_once('../includes/sidebar.php');
-
-$errors = $_SESSION['errors'] ?? [];
-$old = $errors['old'] ?? [];
-$generalErrors = $errors['general'] ?? [];
-$oldHobby = (isset($old['hobby']) && is_array($old['hobby'])) ? $old['hobby'] : [];
-$oldGender = $old['gender'] ?? [];
-$oldCountry = $old['country'] ?? [];
-unset($_SESSION['errors']);
-
-// $oldHobby = is_array($old['hobby'] ?? null) ? $old['hobby'] : [];
-
-
 ?>
 
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
@@ -30,7 +18,7 @@ unset($_SESSION['errors']);
                     <!--begin::Row-->
                     <div class="row">
                         <div class="col-sm-6">
-                            <h3 class="mb-0">New User</h3>
+                            <h3 class="mb-0">Ajax New User</h3>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-end">
@@ -71,12 +59,10 @@ unset($_SESSION['errors']);
                                                 Name</label>
                                             <input
                                                 type="text"
-                                                name="first_name"
-                                                value="<?php echo $old['first_name'] ?>"
+                                                name="firstName"
+                                                id="firstName"
                                                 class="form-control" />
-                                            <?php if (!empty($generalErrors['firstName'])) { ?>
-                                                <p style="color:red"><?= $generalErrors['firstName']; ?></p>
-                                            <?php }; ?>
+                                            <p id="fnameCheck" style="color: red;">First name is required.</p>
                                         </div>
 
                                         <div class="mb-3">
@@ -84,13 +70,10 @@ unset($_SESSION['errors']);
                                                 Name</label>
                                             <input
                                                 type="text"
-                                                name="last_name"
-                                                value="<?php echo $old['last_name'] ?>"
-                                                class="form-control"
-                                                id="lastName" />
-                                            <?php if (!empty($generalErrors['lastName'])) { ?>
-                                                <p style="color:red"><?= $generalErrors['lastName']; ?></p>
-                                            <?php }; ?>
+                                                name="lastName"
+                                                id="lastName"
+                                                class="form-control" />
+                                            <p id="lnameCheck" style="color: red;">Last name is required.</p>
                                         </div>
 
                                         <div class="mb-3">
@@ -99,59 +82,42 @@ unset($_SESSION['errors']);
                                             <input
                                                 type="email"
                                                 name="email"
-                                                value="<?php echo $old['email'] ?>"
                                                 class="form-control"
-                                                id="exampleInputEmail1"
+                                                id="email"
                                                 aria-describedby="emailHelp" />
                                             <div id="emailHelp" class="form-text">
                                                 We'll never share your email with anyone else.
                                             </div>
-                                            <?php if (!empty($generalErrors['email'])) { ?>
-                                                <p style="color:red"><?= $generalErrors['email']; ?></p>
-                                            <?php }; ?>
+                                            <p id="emailCheck" style="color: red;"></p>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
-                                                name="password" autocomplete="off" value="<?php echo $old['password'] ?>" />
-                                            <?php
-                                            if (!empty($errors['password'])) {
-                                                foreach ($errors['password'] as $err) {
-                                                    echo "<p style='color:red'>$err</p>";
-                                                }
-                                            }
-                                            ?>
+                                                name="password" id="password" autocomplete="off" />
+                                            <p id="passwordCheck" style="color: red;">Password is required.</p>
+
                                         </div>
                                         <div class="mb-3">
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Confirm Password</label>
                                             <input type="password" class="form-control"
-                                                name="confirm_password" id="exampleInputPassword1" autocomplete="off" />
-                                            <?php
-                                            if (!empty($errors['confirmPassword'])) {
-                                                echo "<p style='color:red'>{$errors['confirmPassword']}</p>";
-                                            }
-                                            ?>
+                                                name="confirmPassword" id="confirmPassword" autocomplete="off" />
+                                            <p class="confirmPasswordCheck" style="color: red;">Confirm passwords is required!</p>
                                         </div>
 
                                         <div class="input-group mb-3">
-
-                                            <input type="file" name="profile_image"
-                                                class="form-control" id="inputGroupFile02" />
-                                            <?php if (!empty($generalErrors['pImg'])) { ?>
-                                                <p style="color:red"><?= $generalErrors['pImg']; ?></p>
-                                            <?php }; ?>
+                                            <input type="file" name="profileImage"
+                                                class="form-control" id="profileImage" />
+                                            <p class="profileImageCheck" style="color: red;">No file selected. The file field is required.</p>
                                         </div>
 
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Address</span>
                                             <textarea class="form-control"
-                                                aria-label="With textarea" name="address"><?php echo $old['address'] ?></textarea>
-                                            <?php if (!empty($generalErrors['address'])) { ?>
-                                                <p style="color:red"><?= $generalErrors['address']; ?></p>
-                                            <?php }; ?>
+                                                aria-label="With textarea" name="address" id="address"></textarea>
+                                            <p class="addressCheck" style="color: red;">address is required.</p>
                                         </div>
 
                                         <div class="mb-3">
@@ -159,12 +125,9 @@ unset($_SESSION['errors']);
                                             <input
                                                 type="number"
                                                 name="phone"
-                                                value="<?php echo $old['phone'] ?>"
                                                 class="form-control"
                                                 id="phone" />
-                                            <?php if (!empty($generalErrors['phone'])) { ?>
-                                                <p style="color:red"><?= $generalErrors['phone']; ?></p>
-                                            <?php }; ?>
+                                            <p class="phoneCheck" style="color: red;">Phone is required</p>
                                         </div>
 
                                         <fieldset class="row mb-3">
@@ -177,9 +140,9 @@ unset($_SESSION['errors']);
                                                         type="radio"
                                                         name="gender"
                                                         id="gridRadios1"
-                                                        value="Male" <?= ($oldGender == "Male") ? 'checked' : '' ?> />
-                                                    <label class="form-check-label" for="gridRadios1">
-                                                        Male </label>
+                                                        value="Male"
+                                                        <label class="form-check-label" for="gridRadios1">
+                                                    Male </label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input
@@ -187,7 +150,7 @@ unset($_SESSION['errors']);
                                                         type="radio"
                                                         name="gender"
                                                         id="gridRadios2"
-                                                        value="Female" <?= ($oldGender == "Female") ? 'checked' : '' ?> />
+                                                        value="Female" />
                                                     <label class="form-check-label" for="gridRadios2">
                                                         Female </label>
                                                 </div>
@@ -197,54 +160,48 @@ unset($_SESSION['errors']);
                                                         type="radio"
                                                         name="gender"
                                                         id="gridRadios3"
-                                                        value="Other" <?= ($oldGender == "Other") ? 'checked' : '' ?> />
+                                                        value="Other" />
                                                     <label class="form-check-label" for="gridRadios3">
                                                         Other </label>
                                                 </div>
                                             </div>
-                                            <?php if (!empty($generalErrors['gender'])) { ?>
-                                                <p style="color:red"><?= $generalErrors['gender']; ?></p>
-                                            <?php }; ?>
+                                            <p class="genderCheck" style="color: red;">please select at least one gender.</p>
                                         </fieldset>
 
                                         hobby
                                         <div class="mb-3 form-check">
                                             <input type="checkbox" class="form-check-input"
-                                                name="hobby[]" value="Reading" <?= in_array('Reading', (array)$oldHobby) ? 'checked' : '' ?>>
+                                                name="hobby[]" value="Reading">
                                             <label class="form-check-label"
                                                 for="exampleCheck1">Reading</label>
                                         </div>
                                         <div class="mb-3 form-check">
                                             <input type="checkbox" class="form-check-input"
-                                                name="hobby[]" value="Coading" <?= in_array('Coading', $oldHobby) ? 'checked' : '' ?> />
+                                                name="hobby[]" value="Coading" />
                                             <label class="form-check-label"
                                                 for="exampleCheck2">Coading</label>
                                         </div>
                                         <div class="mb-3 form-check">
                                             <input type="checkbox" class="form-check-input"
-                                                name="hobby[]" value="Gaming" <?= in_array('Gaming', $oldHobby) ? 'checked' : '' ?> />
+                                                name="hobby[]" value="Gaming" />
                                             <label class="form-check-label"
                                                 for="exampleCheck3">Gaming</label>
                                         </div>
-
-                                        <?php if (!empty($generalErrors['hobby'])) { ?>
-                                            <p style="color:red"><?= $generalErrors['hobby']; ?></p>
-                                        <?php }; ?>
+                                        <p class="hobbyCheck" style="color: red;">please select at least one hobby.</p>
 
                                         <div class="col-md-6">
                                             <label for="validationCustom04"
                                                 class="form-label">State</label>
-                                            <select class="form-select" id="validationCustom04"
-                                                name="country" >
-                                                <option value="">Choose...</option>
-                                                <option value="India" <?= ($oldCountry == "India") ? 'selected' : '' ?>>India</option>
-                                                <option value="USA" <?= ($oldCountry == "USA") ? 'selected' : '' ?>>USA</option>
-                                                <option value="UK" <?= ($oldCountry == "UK") ? 'selected' : '' ?>>UK</option>
+                                            <select class="form-select" id="country"
+                                                name="country">
+                                                <option disabled selected value>Choose...</option>
+                                                <option>India</option>
+                                                <option>USA</option>
+                                                <option>UK</option>
                                             </select>
                                         </div>
-                                        <?php if (!empty($generalErrors['country'])) { ?>
-                                            <p style="color:red"><?= $generalErrors['country']; ?></p>
-                                        <?php }; ?>
+                                        <p class="countryCheck" style="color: red;">please select at least one country.</p>
+
                                     </div>
                                     <!--end::Body-->
                                     <!--begin::Footer-->
@@ -269,6 +226,7 @@ unset($_SESSION['errors']);
     </main>
     <!--end::App Main-->
     </div>
+    <script src="addUser.js"></script>
 </body>
 <?php
 include_once('../includes/footer.php');

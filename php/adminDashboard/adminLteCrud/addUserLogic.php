@@ -44,6 +44,15 @@ if (isset($_POST['submit'])) {
     } else if (!preg_match('/^[0-9]{10}+$/', $phone)) {
         $generalErrors['phone'] = "Invalid Phone Number format.";
     }
+    if (!isset($_POST['hobby']) || empty($_POST['hobby'])) {
+        $generalErrors['hobby'] = "please select at least one hobby.";
+    }
+    if (!isset($_POST['gender']) || empty($_POST['gender'])) {
+        $generalErrors['gender'] = "please select at least one gender.";
+    }
+    if (!isset($_POST['country']) || empty($_POST['country'])) {
+        $generalErrors['country'] = "please select at least one country.";
+    }
     if ($_FILES['profile_image']['error'] === UPLOAD_ERR_NO_FILE) {
         $generalErrors['pImg'] = " No file selected. The file field is required.";
     }
@@ -53,20 +62,16 @@ if (isset($_POST['submit'])) {
     }
 
     // Validate password strength
-    if (empty($pass)) {
-        $passwordErrors[] = "Password is required.";
-    } else {
-        // If the password is not empty, check individual constraints
+    if (!empty($pass)) {
         if (strlen($pass) < 8 || !preg_match("#[A-Z]+#", $pass) || !preg_match("#[a-z]+#", $pass) || !preg_match("#[0-9]+#", $pass) || !preg_match("/[\W]+/", $pass)) {
             $passwordErrors[] = "Password must be at least 8 characters long, 1 uppercase letter, 1 lowercase letter, 1 special character.";
-        }
-    }
-    if (!empty($pass)) {
-        if (empty($cpass)) {
+        }else if (empty($cpass)) {
             $confirmPasswordError = "Confirm passwords is required!";
         } else if ($pass !== $cpass) {
             $confirmPasswordError = "Passwords do not match!";
         }
+    } else {
+         $passwordErrors[] = "Password is required.";
     }
     if (empty($passwordErrors) && empty($confirmPasswordError) && empty($generalErrors)) {
         $password = password_hash($pass, PASSWORD_DEFAULT);

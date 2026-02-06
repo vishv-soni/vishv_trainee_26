@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>date picker</title>
+        <link rel="stylesheet"
+            href="https://code.jquery.com/ui/1.13.3/themes/smoothness/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+    </head>
+    <body>
+        <div id="datepicker"></div>
+        <input type="text" id="date">
+
+
+        <script>
+            $( "#datepicker" ).datepicker({
+                dateFormat: "dd-mm-yy",
+                changeMonth: true,
+                changeYear: true,
+                maxDate: "0"
+            });
+
+            $('#date').datepicker({dateFormat: 'yy-mm-dd' , changeMonth: true,
+                changeYear: true,
+                });
+
+
+            // Getter
+            // var appendText = $( "#datepicker" ).datepicker( "option", "appendText" );
+            
+            // Setter
+            // $( "#datepicker" ).datepicker( "option", "appendText", "(hello)" );
+
+        </script>
+    </body>
+</html>

@@ -9,6 +9,9 @@ $flash = $_SESSION['flash'] ?? [];
 $old = $flash['old'] ?? [];
 $generalErrors = $flash['generalError'] ?? [];
 $errors = $flash['errors'] ?? [];
+$oldHobby = (isset($old['hobby']) && is_array($old['hobby'])) ? $old['hobby'] : [];
+$oldGender = $old['gender'] ?? [];
+$oldCountry = $old['country'] ?? [];
 unset($_SESSION['flash']);
 
 $register = new Register();
@@ -116,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
-                                                name="password" minlength="8" autocomplete="off"  value="<?php echo $old['password']?>" />
+                                                name="password" autocomplete="off" value="<?php echo $old['password'] ?>" />
                                             <?php
                                             if (!empty($errors['password'])) {
                                                 foreach ($errors['password'] as $err) {
@@ -132,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 name="confirmPassword" id="exampleInputPassword1" autocomplete="off" />
                                             <?php
                                             if (!empty($errors['confirmPassword'])) {
-                                                    echo "<p style='color:red'>{$errors['confirmPassword']}</p>";
+                                                echo "<p style='color:red'>{$errors['confirmPassword']}</p>";
                                             }
                                             ?>
                                         </div>
@@ -148,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <span class="input-group-text">Address</span>
                                             <textarea class="form-control"
                                                 aria-label="With textarea" name="address"><?php echo $old['address'] ?? $data['address']; ?></textarea>
-                                            <?php if (!empty($generalErrors['address'])){ ?>
+                                            <?php if (!empty($generalErrors['address'])) { ?>
                                                 <p style="color:red"><?= $generalErrors['address']; ?></p>
                                             <?php }; ?>
                                         </div>
@@ -161,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 value="<?php echo $old['phone'] ?? $data['phone']; ?>"
                                                 class="form-control"
                                                 id="phone" />
-                                            <?php if (!empty($generalErrors['phone'])){ ?>
+                                            <?php if (!empty($generalErrors['phone'])) { ?>
                                                 <p style="color:red"><?= $generalErrors['phone']; ?></p>
                                             <?php }; ?>
                                         </div>
@@ -177,10 +180,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         name="gender"
                                                         id="gridRadios1"
                                                         value="Male"
-
-                                                        <?php if ($data['gender'] == "Male") echo "checked"; ?> />
-                                                    <label class="form-check-label" for="gridRadios1">
-                                                        Male </label>
+                                                        <?php if ($data['gender'] == "Male" || $oldGender == "Male") echo "checked"; ?>
+                                                        <label class="form-check-label" for="gridRadios1">
+                                                    Male </label>
                                                 </div>
                                                 <div class="form-check">
                                                     <input
@@ -189,10 +191,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         name="gender"
                                                         id="gridRadios2"
                                                         value="Female"
-
-                                                        <?php if ($data['gender'] == "Female") echo "checked"; ?> />
-                                                    <label class="form-check-label" for="gridRadios2">
-                                                        Female </label>
+                                                        <?php if ($data['gender'] == "Female" || $oldGender == "Female") echo "checked"; ?>
+                                                        <label class="form-check-label" for="gridRadios2">
+                                                    Female </label>
                                                 </div>
                                                 <div class="form-check mb-3">
                                                     <input
@@ -201,45 +202,83 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         name="gender"
                                                         id="gridRadios3"
                                                         value="Other"
-
-                                                        <?php if ($data['gender'] == "Other") echo "checked"; ?> />
-                                                    <label class="form-check-label" for="gridRadios3">
-                                                        Other </label>
+                                                        <?php if ($data['gender'] == "Other" || $oldGender == "Other") echo "checked"; ?>
+                                                        <label class="form-check-label" for="gridRadios3">
+                                                    Other </label>
                                                 </div>
                                             </div>
+                                            <?php if (!empty($generalErrors['gender'])) { ?>
+                                                <p style="color:red"><?= $generalErrors['gender']; ?></p>
+                                            <?php }; ?>
                                         </fieldset>
 
                                         hobby
-                                        <?php $h = explode(",", $data['hobby']); ?>
+                                        <!-- $h = explode(",", $data['hobby']); 
+                                        
+                                        if(!empty($oldHobby) && count($oldHobby) > 0){
+                                            $finalHobby = $oldHobby;
+                                        }
+                                        elseif(!empty($h) && count($h) > 0){
+                                            $finalHobby = $h;
+                                        }else{
+                                            $finalHobby = [];
+                                        } -->
+                                        <?php
+                                        if (isset($_SESSION["hobbies"])) {
+                                            $h = [];
+                                            unset($_SESSION["hobbies"]);
+                                        } else if (isset($old["hobby"]) && $old["hobby"]) {
+                                            $h = $old["hobby"];
+                                        } else {
+
+                                            $h = explode(",", $data['hobby']);
+                                        }
+                                        ?>
+
                                         <div class="mb-3 form-check">
                                             <input type="checkbox" class="form-check-input"
-                                                name="hobby[]" value="Reading" <?php if (in_array("Reading", $h)) echo "checked"; ?>>
+                                                name="hobby[]" value="Reading" <?php if (in_array("Reading", $h)) {
+                                                                                    echo "checked";
+                                                                                }
+                                                                                ?> />
                                             <label class="form-check-label"
-                                                for="exampleCheck2">Reading</label>
+                                                for="exampleCheck1">Reading</label>
                                         </div>
                                         <div class="mb-3 form-check">
                                             <input type="checkbox" class="form-check-input"
-                                                name="hobby[]" value="Coading" <?php if (in_array("Coading", $h)) echo "checked"; ?> />
+                                                name="hobby[]" value="Coading" <?php if (in_array("Coading", $h)) {
+                                                                                    echo "checked";
+                                                                                }
+                                                                                ?> />
                                             <label class="form-check-label"
                                                 for="exampleCheck2">Coading</label>
                                         </div>
                                         <div class="mb-3 form-check">
                                             <input type="checkbox" class="form-check-input"
-                                                name="hobby[]" value="Gaming" <?php if (in_array("Gaming", $h)) echo "checked"; ?> />
+                                                name="hobby[]" value="Gaming" <?php if (in_array("Gaming", $h)) {
+                                                                                    echo "checked";
+                                                                                }
+                                                                                ?> />
                                             <label class="form-check-label"
-                                                for="exampleCheck2">Gaming</label>
+                                                for="exampleCheck3">Gaming</label>
                                         </div>
+                                        <?php if (!empty($generalErrors['hobby'])) { ?>
+                                            <p style="color:red"><?= $generalErrors['hobby']; ?></p>
+                                        <?php }; ?>
 
                                         <div class="col-md-6">
                                             <label for="validationCustom04"
                                                 class="form-label">State</label>
                                             <select class="form-select" id="validationCustom04"
                                                 name="country">
-                                                <option selected disabled value>Choose...</option>
-                                                <option <?php if ($data['country'] == "India") echo "selected"; ?>>India</option>
-                                                <option <?php if ($data['country'] == "USA") echo "selected"; ?>>USA</option>
-                                                <option <?php if ($data['country'] == "UK") echo "selected"; ?>>UK</option>
+                                                <option value="">Choose...</option>
+                                                <option value="India" <?php if (($data['country'] == "India") || ($oldCountry == "India")) echo "selected"; ?>>India</option>
+                                                <option value="USA" <?php if (($data['country'] == "USA") || ($oldCountry == "USA")) echo "selected"; ?>>USA</option>
+                                                <option value="UK" <?php if (($data['country'] == "UK") || ($oldCountry == "UK")) echo "selected"; ?>>UK</option>
                                             </select>
+                                            <?php if (!empty($generalErrors['country'])) { ?>
+                                                <p style="color:red"><?= $generalErrors['country']; ?></p>
+                                            <?php }; ?>
                                         </div>
                                     </div>
                                     <!--end::Body-->

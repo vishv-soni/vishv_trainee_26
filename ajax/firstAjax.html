@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>firstAjax</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <button id="fetch-data">Click me, nigguh!</button>
+    <div id="result"></div>
+
+    <script>
+
+        $(document).ready(function(){
+            $("#fetch-data").click(function(){
+                $.ajax({
+                url: "firstAjax.php",
+                type: "GET",
+                success: function(result){
+                    $("#result").html(result);
+                }
+            });
+            })
+        })
+    </script>
+</body>
+</html>

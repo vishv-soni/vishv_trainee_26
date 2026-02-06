@@ -1,7 +1,9 @@
 <?php
 session_start();
+$old = $_SESSION["oldData"] ?? [];
 $errors = $_SESSION['errors'] ?? [];
 unset($_SESSION['errors']);
+unset($_SESSION['oldData']);
 ?>
 <!doctype html>
 <html lang="en">
@@ -115,7 +117,7 @@ unset($_SESSION['errors']);
                                             <input
                                                 type="email"
                                                 name="email"
-                                                value="<?php echo $data['email']; ?>"
+                                                value="<?php echo $old['email']; ?>"
                                                 class="form-control"
                                                 id="exampleInputEmail1"
                                                 aria-describedby="emailHelp" />
@@ -131,7 +133,7 @@ unset($_SESSION['errors']);
                                             <label for="exampleInputPassword1"
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
-                                                name="password" value="<?php echo $data['password']; ?>" />
+                                                name="password"  />
                                             <?php if (!empty($errors['pass'])) { ?>
                                                 <p style="color:red"><?= $errors['pass']; ?></p>
                                             <?php }; ?>

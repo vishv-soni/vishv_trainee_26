@@ -26,7 +26,7 @@ class Register
         $address = $data['address'];
         $phone = $data['phone'];
         $gender  = $data['gender'] ?? null;
-        $hobby   = !empty($data["hobby"]) ? implode(",", $data['hobby']) : null;
+        $hobby   = !empty($data["hobby"]) ? implode(",", $data['hobby']) : '';
         $country = $data['country'];
         $passwordErrors = [];
         $confirmPasswordError = '';
@@ -51,16 +51,18 @@ class Register
         } else if (!preg_match('/^[0-9]{10}+$/', $phone)) {
             $generalErrors['phone'] = "Invalid Phone Number format.";
         }
-         if ($_FILES['profile_image']['error'] === UPLOAD_ERR_NO_FILE) {
-        $generalErrors['pImg'] = " No file selected. The file field is required.";
-    }
-     if (isset($_POST['hobby']) && $_POST['hobby'] == 'Reading') {
-        // Checkbox is checked and value is correct
-        echo "checked";
-        // Proceed with saving to the database, sending emails, etc.
-    } else {
-         $generalErrors['hobby'] = "Hobbies required";
-    }
+        if ($_FILES['profile_image']['error'] === UPLOAD_ERR_NO_FILE) {
+            $generalErrors['pImg'] = " No file selected. The file field is required.";
+        }
+        if (!isset($data['hobby']) || empty($data['hobby'])) {
+            $generalErrors['hobby'] = "please select at least one hobby.";
+        }
+        if (!isset($data['gender']) || empty($data['gender'])) {
+            $generalErrors['gender'] = "please select at least one gender.";
+        }
+        if (!isset($data['country']) || empty($data['country'])) {
+            $generalErrors['country'] = "please select at least one country.";
+        }
         // Check if email already exists
         $query = "SELECT id FROM users WHERE email='$email'";
         $result = $this->db->select($query);
@@ -68,20 +70,16 @@ class Register
             $generalErrors[] = "Email already exists.";
         }
         // Validate password strength
-        if (empty($password)) {
-            $passwordErrors[] = "Password is required.";
-        } else {
-            // If the password is not empty, check individual constraints
+        if (!empty($password)) {
             if (strlen($password) < 8 || !preg_match("#[A-Z]+#", $password) || !preg_match("#[a-z]+#", $password) || !preg_match("#[0-9]+#", $password) || !preg_match("/[\W]+/", $password)) {
                 $passwordErrors[] = "Password must be at least 8 characters long, 1 uppercase letter, 1 lowercase letter, 1 special character.";
-            }
-        }
-        if (!empty($password)) {
-            if (empty($confirmPassword)) {
+            } else if (empty($confirmPassword)) {
                 $confirmPasswordError = "Confirm passwords is required!";
             } else if ($password !== $confirmPassword) {
                 $confirmPasswordError = "Passwords do not match!";
             }
+        } else {
+            $passwordErrors[] = "Password is required.";
         }
 
         if (empty($passwordErrors) && empty($confirmPasswordError) && empty($generalErrors)) {
@@ -161,18 +159,26 @@ class Register
         } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $oopGeneralErrors['email'] = "Invalid email format.";
         }
+        if (!isset($data['hobby']) || empty($data['hobby'])) {
+            $_SESSION["hobbies"] = "hobbies";
+            $oopGeneralErrors['hobby'] = "please select at least one hobby.";
+        }
+        if (!isset($data['gender']) || empty($data['gender'])) {
+            $oopGeneralErrors['gender'] = "please select at least one gender.";
+        }
+        if (!isset($data['country']) || empty($data['country'])) {
+            $oopGeneralErrors['country'] = "please select at least one country.";
+        }
+        $query = "SELECT id FROM users WHERE email='$email' AND id != $id";
+        $result = $this->db->select($query);
+        if ($result) {
+            $oopGeneralErrors['email'] = "Email already exists.";
+        }
+
         if (empty($phone)) {
             $oopGeneralErrors['phone'] = "Phone is required";
         } else if (!preg_match('/^[0-9]{10}+$/', $phone)) {
             $oopGeneralErrors['phone'] = "Invalid Phone Number format.";
-        }
-        if (empty($pass)) {
-            $oopPasswordErrors[] = "Password is required.";
-        } else {
-            // If the password is not empty, check individual constraints
-            if (strlen($pass) < 8 || !preg_match("#[A-Z]+#", $pass) || !preg_match("#[a-z]+#", $pass) || !preg_match("#[0-9]+#", $pass) || !preg_match("/[\W]+/", $pass)) {
-                $oopPasswordErrors[] = "Password must be at least 8 characters long, 1 uppercase letter, 1 lowercase letter, 1 special character.";
-            }
         }
 
         $query = "UPDATE users SET 
@@ -194,12 +200,15 @@ class Register
                 $query .= ", profile_image='$profileImage'";
             }
         }
-
+        //password validation
         if (!empty($pass)) {
             if (empty($cpass)) {
                 $oopConfirmPasswordError = "Confirm passwords is required!";
             } else if ($pass !== $cpass) {
                 $oopConfirmPasswordError = "Passwords do not match!";
+            }
+            if (strlen($pass) < 8 || !preg_match("#[A-Z]+#", $pass) || !preg_match("#[a-z]+#", $pass) || !preg_match("#[0-9]+#", $pass) || !preg_match("/[\W]+/", $pass)) {
+                $oopPasswordErrors[] = "Password must be at least 8 characters long, 1 uppercase letter, 1 lowercase letter, 1 special character.";
             }
             if (empty($oopPasswordErrors) && empty($oopConfirmPasswordError)) {
                 $password = password_hash($pass, PASSWORD_DEFAULT);
@@ -247,4 +256,3 @@ class Register
         }
     }
 }
-    

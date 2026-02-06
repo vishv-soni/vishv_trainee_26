@@ -65,6 +65,9 @@ session_start();
     href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
     integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
     crossorigin="anonymous" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -79,10 +82,10 @@ session_start();
         <!--begin::Start Navbar Links-->
         <ul class="navbar-nav">
           <li class="nav-item">
-              <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
-                <i class="bi bi-list"></i>  
-              </a>
-            </li>
+            <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+              <i class="bi bi-list"></i>
+            </a>
+          </li>
           <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
         </ul>
         <!--end::Start Navbar Links-->

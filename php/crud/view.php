@@ -9,6 +9,8 @@
     <th>First Name</th>
     <th>Last Name</th>
     <th>Email</th>
+    <th>Phone</th>
+    <th>Address</th>
     <th>Gender</th>
     <th>Hobby</th>
     <th>Country</th>
@@ -26,6 +28,8 @@ while ($row = mysqli_fetch_assoc($result)) {
     <td><?= $row['first_name'] ?></td>
     <td><?= $row['last_name'] ?></td>
     <td><?= $row['email'] ?></td>
+    <td><?= $row['phone'] ?></td>
+    <td><?= $row['address'] ?></td>
     <td><?= $row['gender'] ?></td>
     <td><?= $row['hobby'] ?></td>
     <td><?= $row['country'] ?></td>

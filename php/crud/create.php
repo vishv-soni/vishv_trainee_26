@@ -8,11 +8,11 @@
 
 <h2>Add User</h2>
 <form method="post" action="insert.php" enctype="multipart/form-data">
-    First Name: <input type="text" name="first_name" required><br><br>
-    Last Name: <input type="text" name="last_name" required><br><br>
-    Email: <input type="email" name="email" requried><br><br>
-    Password: <input type="password" name="password" required><br><br>
-    Confirm Password: <input type="password" name="confirm_password" requried><br><br>
+    First Name: <input type="text" name="first_name" ><br><br>
+    Last Name: <input type="text" name="last_name" ><br><br>
+    Email: <input type="email" name="email" ><br><br>
+    Password: <input type="password" name="password" ><br><br>
+    Confirm Password: <input type="password" name="confirm_password" ><br><br>
 
     Profile Image: <input type="file" name="profile_image" ><br><br>
 
