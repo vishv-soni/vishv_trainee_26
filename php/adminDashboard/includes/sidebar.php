@@ -112,21 +112,13 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="../oopCrud/index.php" class="nav-link ">
+                    <a href="../ajaxCrud/view.php" class="nav-link ">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>View User</p>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a href="../ajaxCrud/addUser.php" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Add User</p>
-                    </a>
-                  </li>
-                  
                 </ul>
               </li>
-              
             </ul>
             <!--end::Sidebar Menu-->
           </nav>

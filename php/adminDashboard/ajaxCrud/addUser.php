@@ -1,11 +1,12 @@
 <?php
 session_start();
 include_once('../adminLteCrud/db.php');
-require '../adminLteCrud/auth.php';
+// require '../adminLteCrud/auth.php';
 include_once('../includes/header.php');
 include_once('../includes/sidebar.php');
 ?>
 
+<link rel="stylesheet" href="css/style.css">
 <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
     <!--begin::App Wrapper-->
     <div class="app-wrapper">
@@ -39,7 +40,6 @@ include_once('../includes/sidebar.php');
                 <div class="container-fluid">
                     <!--begin::Row-->
                     <div class="row justify-content-center">
-
                         <!--begin::Col-->
                         <div class="col-md-6">
                             <!--begin::Quick Example-->
@@ -51,9 +51,10 @@ include_once('../includes/sidebar.php');
                                 </div>
                                 <!--end::Header-->
                                 <!--begin::Form-->
-                                <form method="post" id="myForm" action="addUserLogic.php" enctype="multipart/form-data">
+                                <form id="myForm" enctype="multipart/form-data">
                                     <!--begin::Body-->
                                     <div class="card-body">
+                                        <input type="hidden" name="id" id="id">
                                         <div class="mb-3">
                                             <label for="firstName" class="form-label">First
                                                 Name</label>
@@ -62,7 +63,8 @@ include_once('../includes/sidebar.php');
                                                 name="firstName"
                                                 id="firstName"
                                                 class="form-control" />
-                                            <p id="fnameCheck" style="color: red;">First name is required.</p>
+                                            <!-- <p id="fnameCheck" style="color: red;">First name is required.</p> -->
+                                            <span class="error" id="firstNameError"></span>
                                         </div>
 
                                         <div class="mb-3">
@@ -73,7 +75,8 @@ include_once('../includes/sidebar.php');
                                                 name="lastName"
                                                 id="lastName"
                                                 class="form-control" />
-                                            <p id="lnameCheck" style="color: red;">Last name is required.</p>
+                                            <!-- <p id="lnameCheck" style="color: red;">Last name is required.</p> -->
+                                            <span class="error" id="lastNameError"></span>
                                         </div>
 
                                         <div class="mb-3">
@@ -88,7 +91,8 @@ include_once('../includes/sidebar.php');
                                             <div id="emailHelp" class="form-text">
                                                 We'll never share your email with anyone else.
                                             </div>
-                                            <p id="emailCheck" style="color: red;"></p>
+                                            <!-- <p id="emailCheck" style="color: red;"></p> -->
+                                            <span class="error" id="emailError"></span>
                                         </div>
 
                                         <div class="mb-3">
@@ -96,7 +100,8 @@ include_once('../includes/sidebar.php');
                                                 class="form-label">Password</label>
                                             <input type="password" class="form-control"
                                                 name="password" id="password" autocomplete="off" />
-                                            <p id="passwordCheck" style="color: red;">Password is required.</p>
+                                            <!-- <p id="passwordCheck" style="color: red;">Password is required.</p> -->
+                                            <span class="error" id="passwordError"></span>
 
                                         </div>
                                         <div class="mb-3">
@@ -104,20 +109,23 @@ include_once('../includes/sidebar.php');
                                                 class="form-label">Confirm Password</label>
                                             <input type="password" class="form-control"
                                                 name="confirmPassword" id="confirmPassword" autocomplete="off" />
-                                            <p class="confirmPasswordCheck" style="color: red;">Confirm passwords is required!</p>
+                                            <!-- <p class="confirmPasswordCheck" style="color: red;">Confirm passwords is required!</p> -->
+                                            <span class="error" id="confirmPasswordError"></span>
                                         </div>
 
                                         <div class="input-group mb-3">
                                             <input type="file" name="profileImage"
                                                 class="form-control" id="profileImage" />
-                                            <p class="profileImageCheck" style="color: red;">No file selected. The file field is required.</p>
+                                            <!-- <p class="profileImageCheck" style="color: red;">No file selected. The file field is required.</p> -->
+                                            <span class="error" id="fileError"></span>
                                         </div>
 
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Address</span>
                                             <textarea class="form-control"
                                                 aria-label="With textarea" name="address" id="address"></textarea>
-                                            <p class="addressCheck" style="color: red;">address is required.</p>
+                                            <!-- <p class="addressCheck" style="color: red;">address is required.</p> -->
+                                            <span class="error" id="addressError"></span>
                                         </div>
 
                                         <div class="mb-3">
@@ -127,7 +135,9 @@ include_once('../includes/sidebar.php');
                                                 name="phone"
                                                 class="form-control"
                                                 id="phone" />
-                                            <p class="phoneCheck" style="color: red;">Phone is required</p>
+                                            <!-- <p class="phoneCheck" style="color: red;">Phone is required</p> -->
+                                            <span class="error" id="phoneNumberError"></span>
+
                                         </div>
 
                                         <fieldset class="row mb-3">
@@ -165,7 +175,8 @@ include_once('../includes/sidebar.php');
                                                         Other </label>
                                                 </div>
                                             </div>
-                                            <p class="genderCheck" style="color: red;">please select at least one gender.</p>
+                                            <!-- <p class="genderCheck" style="color: red;">please select at least one gender.</p> -->
+                                            <span class="error" id="genderError"></span>
                                         </fieldset>
 
                                         hobby
@@ -187,7 +198,8 @@ include_once('../includes/sidebar.php');
                                             <label class="form-check-label"
                                                 for="exampleCheck3">Gaming</label>
                                         </div>
-                                        <p class="hobbyCheck" style="color: red;">please select at least one hobby.</p>
+                                        <!-- <p class="hobbyCheck" style="color: red;">please select at least one hobby.</p> -->
+                                        <span class="error" id="hobby_error"></span>
 
                                         <div class="col-md-6">
                                             <label for="validationCustom04"
@@ -200,7 +212,8 @@ include_once('../includes/sidebar.php');
                                                 <option>UK</option>
                                             </select>
                                         </div>
-                                        <p class="countryCheck" style="color: red;">please select at least one country.</p>
+                                        <!-- <p class="countryCheck" style="color: red;">please select at least one country.</p> -->
+                                        <span class="error" id="country_error"></span>
 
                                     </div>
                                     <!--end::Body-->
@@ -213,6 +226,8 @@ include_once('../includes/sidebar.php');
                                 <!--end::Form-->
                             </div>
                             <!--end::Quick Example-->
+                            <div id="message"></div>
+                            <div id="userData"></div>
                         </div>
                         <!--end::Form Validation-->
                     </div>
@@ -226,7 +241,7 @@ include_once('../includes/sidebar.php');
     </main>
     <!--end::App Main-->
     </div>
-    <script src="addUser.js"></script>
+    <script src="js/script.js"></script>
 </body>
 <?php
 include_once('../includes/footer.php');
