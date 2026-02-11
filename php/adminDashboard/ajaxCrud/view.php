@@ -2,15 +2,14 @@
 include_once('../adminLteCrud/db.php');
 include_once('../includes/header.php');
 include_once('../includes/sidebar.php');
+include_once('../adminLteCrud/auth.php');
 $sql = "SELECT * FROM ajax_users";
 $result = mysqli_query($conn, $sql);
 ?>
-
 <!-- jQuery + jQuery UI -->
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-
 <style>
   #dialogForm {
     display: none;
@@ -22,67 +21,66 @@ $result = mysqli_query($conn, $sql);
   }
 </style>
 
-<main class="app-main">
-  <div class="app-content">
-    <div class="container-fluid">
-
-      <!-- ADD USER BUTTON -->
-      <button class="btn btn-primary mb-3" id="openAddUser">Add User</button>
-      <!-- USER TABLE -->
-      <div class="card mb-4">
-        <div class="card-body">
-          <table id="userTable"  class="table table-bordered">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Image</th>
-                <th>First</th>
-                <th>Last</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Gender</th>
-                <th>Hobby</th>
-                <th>Country</th>
-                <th>Address</th>
-                <th>Action</th>
+<!-- <main class="app-main"> -->
+<div class="app-content">
+  <div class="container-fluid">
+    <!-- ADD USER BUTTON -->
+    <button class="btn btn-primary mb-3" id="openAddUser">Add User</button>
+    <!-- USER TABLE -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <table id="userTable" class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Image</th>
+              <th>First</th>
+              <th>Last</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Gender</th>
+              <th>Hobby</th>
+              <th>Country</th>
+              <th>Address</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            while ($row = mysqli_fetch_assoc($result)) {
+              $userImage = (!empty($row['profile_image'])) ?
+                "upload/" . $row['profile_image'] :
+                "../assets/download.jpeg";
+            ?>
+              <tr class="align-middle" id="row_<?= $row['id'] ?>">
+                <td><?= $row['id'] ?></td>
+                <td><img src="<?= $userImage ?>" width="50"></td>
+                <td><?= $row['first_name'] ?></td>
+                <td><?= $row['last_name'] ?></td>
+                <td><?= $row['email'] ?></td>
+                <td><?= $row['phone'] ?></td>
+                <td><?= $row['gender'] ?></td>
+                <td><?= $row['hobby'] ?></td>
+                <td><?= $row['country'] ?></td>
+                <td><?= $row['address'] ?></td>
+                <td>
+                  <button class="badge text-bg-primary" id="openEditUser" onclick="editUser(<?= $row['id'] ?>)">Edit</button>
+                  <button class="badge text-bg-danger" id="deleteBtn" onclick="deleteData(<?= $row['id'] ?>)">Delete</button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <?php
-              while ($row = mysqli_fetch_assoc($result)) {
-                $userImage = (!empty($row['profile_image'])) ?
-                  "upload/" . $row['profile_image'] :
-                  "../assets/download.jpeg";
-              ?>
-                <tr class="align-middle">
-                  <td><?= $row['id'] ?></td>
-                  <td><img src="<?= $userImage ?>" width="50"></td>
-                  <td><?= $row['first_name'] ?></td>
-                  <td><?= $row['last_name'] ?></td>
-                  <td><?= $row['email'] ?></td>
-                  <td><?= $row['phone'] ?></td>
-                  <td><?= $row['gender'] ?></td>
-                  <td><?= $row['hobby'] ?></td>
-                  <td><?= $row['country'] ?></td>
-                  <td><?= $row['address'] ?></td>
-                  <td>
-                    <button class="badge text-bg-primary"><a style="color: white; padding: 2px; text-decoration: none;" href="edit.php?id=<?= $row['id'] ?>">Edit</a></button>
-                    <button class="badge text-bg-danger"><a style="color: white; padding: 2px; text-decoration: none;" href="delete.php?id=<?= $row['id'] ?>" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></button>
-                  </td>
-                </tr>
-              <?php } ?>
-            </tbody>
-          </table>
-        </div>
+            <?php } ?>
+          </tbody>
+        </table>
       </div>
-
     </div>
+
   </div>
-</main>
+</div>
 
 <!-- POPUP FORM -->
-<div id="dialogForm" title="Add User">
+<div id="dialogForm" title="Add/Edit User">
   <form id="myForm" enctype="multipart/form-data">
+    <input type="hidden" id="id">
     <!--begin::Body-->
     <div class="card-body">
       <div class="mb-3">
@@ -217,7 +215,7 @@ $result = mysqli_query($conn, $sql);
           for="exampleCheck1">Reading</label>
       </div>
       <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input hobby" 
+        <input type="checkbox" class="form-check-input hobby"
           name="hobby[]" value="Coading" />
         <label class="form-check-label"
           for="exampleCheck2">Coading</label>
@@ -233,17 +231,16 @@ $result = mysqli_query($conn, $sql);
 
       <div class="col-md-6">
         <label for="validationCustom04"
-          class="form-label">State</label>
+          class="form-label">Country</label>
         <select class="form-select" id="country"
           name="country">
-          <option disabled selected value>Choose...</option>
-          <option>India</option>
+          <option disabled value="">Choose...</option>
+          <option selected>India</option>
           <option>USA</option>
           <option>UK</option>
         </select>
+        <span class="error" id="countryError"></span>
       </div>
-      <!-- <p class="countryCheck" style="color: red;">please select at least one country.</p> -->
-      <span class="error" id="country_error"></span>
     </div>
     <!--end::Body-->
     <!--begin::Footer-->
@@ -255,7 +252,6 @@ $result = mysqli_query($conn, $sql);
 
   <div id="message"></div>
 </div>
-
 <script src="js/script.js"></script>
 
 <?php include_once('../includes/footer.php'); ?>
